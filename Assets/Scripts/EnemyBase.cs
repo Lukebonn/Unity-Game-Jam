@@ -1,8 +1,5 @@
 using UnityEngine;
 
-
-using UnityEngine;
-
 public abstract class EnemyBase : MonoBehaviour
 {
 	[Header("Base Enemy Stats")]
