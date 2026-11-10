@@ -4,6 +4,8 @@ using System;
 public class SignalBus : MonoBehaviour
 {
     public static event Action<int> OnLevelUp;
+    public static event Action OnEnemyDeath;
+
 
     private int currLvl = 1;
 

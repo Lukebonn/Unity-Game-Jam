@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
@@ -9,7 +10,7 @@ public abstract class EnemyBase : MonoBehaviour
 	protected PlayerHealth player;
 	protected bool isDead = false;
 
-	protected virtual void Awake()
+    protected virtual void Awake()
 	{
 		currentHealth = maxHealth;
 	}
@@ -42,6 +43,8 @@ public abstract class EnemyBase : MonoBehaviour
 
 		Debug.Log($"{gameObject.name} died!");
 
-		Destroy(gameObject);
+        OnEnemyDeath?.Invoke();
+
+        Destroy(gameObject);
 	}
 }
