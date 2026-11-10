@@ -43,7 +43,7 @@ public abstract class EnemyBase : MonoBehaviour
 
 		Debug.Log($"{gameObject.name} died!");
 
-        OnEnemyDeath?.Invoke();
+        SignalBus.InvokeEnemyDeath();
 
         Destroy(gameObject);
 	}

@@ -5,9 +5,10 @@ using System;
 public class PlayerHealth : MonoBehaviour
 {
 	public int maxHealth = 100;
-	public int damageReductionPerHit = 0;
+	public int damageReductionPerHit = 0; //now a legacy variable (read below)
+	public int levelUpIncrementPrct;
 
-    // rolling stats (minus health)
+    // rolling stats (minus health ofc^)
     private int PSlevel = 1;
 	//health is also here, but it should be noted that maxHealth is the PS variable
 	private int PSstamina;
@@ -65,19 +66,21 @@ public class PlayerHealth : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SignalBus.OnLevelUp += HandleLevelUp;
+		SignalBus.OnLvlHealth += HandleHlthLvlUp;
 	}
     private void OnDisable()
     {
-        SignalBus.OnLevelUp -= HandleLevelUp;
+        SignalBus.OnLvlHealth -= HandleHlthLvlUp;
     }
 
-    public float Health() { return currentHealth; }
+    public (float num1, float num2, float num3) Health() { return (currentHealth, maxHealth, levelUpIncrementPrct); }
 
-	public void HandleLevelUp(int lvl)
+	public void HandleHlthLvlUp()
     {
-		PSlevel = lvl;
+		PSlevel += 1;
 
-        Debug.Log($"[UI Receiver] Updating interface with score: {PSlevel}");
+		maxHealth += maxHealth * (levelUpIncrementPrct / 100);
+
+        Debug.Log($"Player leveled up to: {PSlevel}, Player health now: {maxHealth}");
 	}
 }
