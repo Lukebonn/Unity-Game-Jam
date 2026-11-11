@@ -19,7 +19,7 @@ public class UnrolledDiceUI : MonoBehaviour
 
     private void AddDie()
     {
-        DiceUI die = Instantiate(diePrefab);
+        DiceUI die = Instantiate(diePrefab, transform);
         dice.Add(die);
         die.Roll();
     }

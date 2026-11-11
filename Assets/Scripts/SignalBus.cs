@@ -6,7 +6,7 @@ public class SignalBus : MonoBehaviour
     //public static event Action<int> OnLevelUp;
     public static event Action OnLevelUp;
     public static event Action OnEnemyDeath;
-    public static event Action OnLvlHealth;
+    public static event Action<int> OnLvlHealth;
     private int PSstamina;
     public static event Action OnLvlStamina;
     private int PSmovement;
@@ -29,9 +29,9 @@ public class SignalBus : MonoBehaviour
     {
         OnEnemyDeath?.Invoke();
     }
-    public static void InvokeLvlHealth()
+    public static void InvokeLvlHealth(int stat)
     {
-        OnLvlHealth?.Invoke();
+        OnLvlHealth?.Invoke(stat);
     }
 
     public void InvokeLvlStamina()

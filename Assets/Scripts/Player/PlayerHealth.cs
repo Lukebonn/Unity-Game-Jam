@@ -75,7 +75,7 @@ public class PlayerHealth : MonoBehaviour
 
     public (float num1, float num2, float num3) Health() { return (currentHealth, maxHealth, levelUpIncrementPrct); }
 
-	public void HandleHlthLvlUp()
+	public void HandleHlthLvlUp(int stat)
     {
 		PSlevel += 1;
 

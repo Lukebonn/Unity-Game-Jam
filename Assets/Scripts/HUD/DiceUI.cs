@@ -7,7 +7,7 @@ public class DiceUI : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] private Image image;
     [SerializeField] private Sprite[] faces;
-    [SerializeField] private int rollTime;
+    [SerializeField] private float rollTime;
 
     public int Value {  get; private set; }
     public bool HasLanded => Value > 0;
@@ -24,6 +24,6 @@ public class DiceUI : MonoBehaviour
         animator.enabled = false;
 
         Value = Random.Range(1, 7);
-        image.sprite = faces[Value];
+        image.sprite = faces[Value - 1];
     }
 }
