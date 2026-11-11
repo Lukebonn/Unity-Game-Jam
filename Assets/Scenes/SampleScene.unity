@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 35593489}
   - component: {fileID: 35593488}
   - component: {fileID: 35593487}
+  - component: {fileID: 35593490}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -149,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e626c6d803677a648a356a7f066e6e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  DiceCocked: 0
 --- !u!114 &35593488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,6 +178,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &35593490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 35593486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a720b89ad4081841a67a4361d421c93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &124897304
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,6 +531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
   damageReductionPerHit: 0
+  levelUpIncrementPrct: 5
 --- !u!114 &252445259
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1369,7 +1384,7 @@ GameObject:
   - component: {fileID: 1745479985}
   - component: {fileID: 1745479984}
   m_Layer: 5
-  m_Name: HealthBar
+  m_Name: StaminaBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1649,7 +1664,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1992327738
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1667,8 +1682,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 272}
+  m_AnchoredPosition: {x: 96.901794, y: 109}
+  m_SizeDelta: {x: -222.1964, y: 54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1992327739
 MonoBehaviour:

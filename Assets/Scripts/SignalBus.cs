@@ -32,7 +32,7 @@ public class SignalBus : MonoBehaviour
     }
     public static void InvokeLvlHealth()
     {
-        OnLevelUp?.Invoke();
+        OnLvlHealth?.Invoke();
     }
 
     public void InvokeLvlStamina()

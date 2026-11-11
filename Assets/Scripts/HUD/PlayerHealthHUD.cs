@@ -15,12 +15,20 @@ public class PlayerHealthHUD : MonoBehaviour
     void Update()
     {
         (Health, MaxHealth, levelUpIncrementPrct) = PlayerHealth.Health();
-        SetHealth();
+        //SetHealth();
+    }
+    private void OnEnable()
+    {
+        SignalBus.OnLvlHealth += SetHealth;
+    }
+    private void OnDisable()
+    {
+        SignalBus.OnLvlHealth -= SetHealth;
     }
 
     void SetHealth()
     {
-        Width += (Width * (levelUpIncrementPrct / 100));
+        Width += (Width * ((float)(levelUpIncrementPrct) / 100));
         float newWidth = (Health / MaxHealth) * Width;
         HealthBar.sizeDelta = new Vector2(newWidth , Height);
     }
