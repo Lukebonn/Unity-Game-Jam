@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(LineRenderer))]
@@ -17,6 +18,8 @@ public class PlayerCombat : MonoBehaviour
 	public float bulletsPerSecond = 6f;
 	public int damagePerBullet = 10;
 	public float bulletRange = 35f;
+
+	public UnityEvent OnFire;
 
 	private CharacterController controller;
 	private Camera cam;
@@ -175,6 +178,8 @@ public class PlayerCombat : MonoBehaviour
 
 	private void Shoot(Vector3 direction)
 	{
+		OnFire?.Invoke();
+
 		// Spawn point just in front of player
 		Vector3 bulletOrigin =
 			transform.position +
