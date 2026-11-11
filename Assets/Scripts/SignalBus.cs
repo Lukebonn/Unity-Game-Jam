@@ -6,7 +6,6 @@ public class SignalBus : MonoBehaviour
     //public static event Action<int> OnLevelUp;
     public static event Action OnLevelUp;
     public static event Action OnEnemyDeath;
-    public bool DiceCocked = false;
     public static event Action OnLvlHealth;
     private int PSstamina;
     public static event Action OnLvlStamina;
