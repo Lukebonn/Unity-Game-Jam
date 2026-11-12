@@ -4,7 +4,7 @@ using System;
 
 public class PlayerHealth : MonoBehaviour
 {
-	public int maxHealth = 100;
+	public float maxHealth = 100f;
 	public int damageReductionPerHit = 0; //now a legacy variable (read below)
 	public int levelUpIncrementPrct;
 
@@ -20,7 +20,7 @@ public class PlayerHealth : MonoBehaviour
 	private int PSdamage;
 
 
-	private int currentHealth;
+	private float currentHealth;
 
 	void Awake()
 	{
@@ -78,11 +78,11 @@ public class PlayerHealth : MonoBehaviour
 
     public (float num1, float num2, float num3) Health() { return (currentHealth, maxHealth, levelUpIncrementPrct); }
 
-	public void HandleHlthLvlUp()
+	public void HandleHlthLvlUp(int stat)
     {
 		PSlevel += 1;
 
-		maxHealth += maxHealth * (levelUpIncrementPrct / 100);
+		maxHealth += maxHealth * (levelUpIncrementPrct / 100f);
 
         Debug.Log($"Player leveled up to: {PSlevel}, Player health now: {maxHealth}");
 	}

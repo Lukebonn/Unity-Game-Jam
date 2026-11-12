@@ -7,20 +7,26 @@ public class PlayerHealthHUD : MonoBehaviour
     [SerializeField] private RectTransform HealthBar;
     [SerializeField] private PlayerHealth PlayerHealth;
 
-    void Start()
-    {
-        (Health, MaxHealth, levelUpIncrementPrct) = PlayerHealth.Health();
-    }
-
     void Update()
     {
         (Health, MaxHealth, levelUpIncrementPrct) = PlayerHealth.Health();
-        SetHealth();
+        SetBar();
+    }
+    private void OnEnable()
+    {
+        SignalBus.OnLvlHealth += ExpandBar;
+    }
+    private void OnDisable()
+    {
+        SignalBus.OnLvlHealth -= ExpandBar;
     }
 
-    void SetHealth()
+    void ExpandBar(int stat)
     {
-        Width += (Width * (levelUpIncrementPrct / 100));
+        Width += (Width * ((levelUpIncrementPrct * stat) / 100f));
+    }
+    void SetBar()
+    {
         float newWidth = (Health / MaxHealth) * Width;
         HealthBar.sizeDelta = new Vector2(newWidth , Height);
     }

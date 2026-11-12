@@ -1,16 +1,42 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class UnrolledDiceUI : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    private int unRolled = 0;
+    [SerializeField] private DiceUI diePrefab;
 
-    void Start()
+    private readonly List<DiceUI> dice = new List<DiceUI>();
+
+    private void OnEnable()
     {
-        animator = GetComponent<Animator>();
+        SignalBus.OnLevelUp += AddDie;
+    }
+    private void OnDisable()
+    {
+        SignalBus.OnLevelUp -= AddDie;
     }
 
-    public void Roll()
+    private void AddDie()
     {
-        animator.SetTrigger("rolling");
+        DiceUI die = Instantiate(diePrefab, transform);
+        dice.Add(die);
+        die.Roll();
+    }
+
+    public bool TrySpendDie(out int rolled)
+    {
+        for (int i = 0; i < dice.Count; i++)
+        {
+            if (dice[i].HasLanded)
+            {
+                rolled = dice[i].Value;
+                Destroy(dice[i].gameObject);
+                dice.RemoveAt(i);
+                return true;
+            }
+        }
+        rolled = 0;
+        return false;
     }
 }
