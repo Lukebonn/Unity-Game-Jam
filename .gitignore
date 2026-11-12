@@ -135,3 +135,8 @@ crashlytics-build.properties
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Paid Asset Store packages are licensed per person and must not be shared
+# through this repo. FEEL was removed in favour of plain Unity audio.
+/[Aa]ssets/[Ff]eel/
+/[Aa]ssets/[Ff]eel.meta
