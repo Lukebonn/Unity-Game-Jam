@@ -8,6 +8,8 @@ public class PlayerHealth : MonoBehaviour
 	public int damageReductionPerHit = 0; //now a legacy variable (read below)
 	public int levelUpIncrementPrct;
 
+	public bool isDead;
+
     // rolling stats (minus health ofc^)
     private int PSlevel = 1;
 	//health is also here, but it should be noted that maxHealth is the PS variable
@@ -23,11 +25,11 @@ public class PlayerHealth : MonoBehaviour
 	void Awake()
 	{
 		currentHealth = maxHealth;
+		isDead = false;
 	}
 
 	public void TakeDamage(int incomingDamage)
 	{
-		if (currentHealth <= 0) return;
 
 		int damage = Mathf.Max(
 			0,
@@ -41,8 +43,9 @@ public class PlayerHealth : MonoBehaviour
 
 		Debug.Log("Player HP: " + currentHealth);
 
-		if (currentHealth == 0)
+		if (currentHealth <= 0)
 		{
+			isDead = true;
 			Debug.Log("GAME OVER!");
 			GetComponent<PlayerCombat>().enabled = false;
 		}
