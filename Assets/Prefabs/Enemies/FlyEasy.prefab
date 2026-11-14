@@ -84,6 +84,7 @@ MonoBehaviour:
   attackRange: 1.45
   hitArcDegrees: 360
   windupSeconds: 0.1
+  minimumWindup: 0.45
   recoverySeconds: 0.1
   attackCooldown: 0.9
   leapDistance: 4
@@ -210,7 +211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.96
+      value: -4.34
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_LocalPosition.z

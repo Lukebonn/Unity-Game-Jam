@@ -43,6 +43,13 @@ public abstract class EnemyBase : MonoBehaviour
 
 	private float flyHeight = 1f;
 
+	// The idle clips move the body bone (Body_M) up by as much as 4 m over the clip, which made
+	// enemies float in the sky (and, with the clip looping, sink and rise). Holding that one bone
+	// where the model has it keeps the body at the hitbox's height; it still turns, and the wings,
+	// legs and head still animate.
+	private Transform bodyBone;
+	private Vector3 bodyBonePosition;
+
 	protected virtual void OnEnable() => All.Add(this);
 	protected virtual void OnDisable() => All.Remove(this);
 
@@ -70,6 +77,32 @@ public abstract class EnemyBase : MonoBehaviour
 		CharacterController controller = GetComponent<CharacterController>();
 		if (controller != null)
 			flyHeight = controller.height / 2f - controller.center.y;
+
+		// Before the Animator moves anything, remember where the body bone sits in the model
+		Animator animator = GetComponentInChildren<Animator>();
+		if (animator != null && animator.runtimeAnimatorController != null)
+		{
+			bodyBone = FindPart(animator.transform, "Body_M");
+			if (bodyBone != null) bodyBonePosition = bodyBone.localPosition;
+		}
+	}
+
+	// LateUpdate runs after the Animator has posed the model for this frame
+	protected virtual void LateUpdate()
+	{
+		if (bodyBone != null)
+			bodyBone.localPosition = bodyBonePosition;
+	}
+
+	private static Transform FindPart(Transform parent, string partName)
+	{
+		foreach (Transform child in parent)
+		{
+			if (child.name == partName) return child;
+			Transform found = FindPart(child, partName);
+			if (found != null) return found;
+		}
+		return null;
 	}
 
 	protected virtual void Start()

@@ -19,6 +19,13 @@ public class PlayerCombat : MonoBehaviour
 	private const float SprintMultiplier = 4f;  // sprint is 4x walk
 	public float gravity = -30f;                // about 3x real gravity, so you drop into a hole fast
 
+	[Header("Animation")]
+	[Tooltip("The model's Animator (Player_AC). Found on the children if left empty.")]
+	[SerializeField] private Animator animator;
+	private static readonly int MovingId = Animator.StringToHash("Moving");
+	private bool checkedAnimator;
+	private bool hasMovingBool;   // only set the bool if the controller has it (no warning spam otherwise)
+
 	[Header("Shooting")]
 	public float bulletsPerSecond = 1.2f;
 	public float fireRatePercentPerPoint = 3f;  // each rolled point: 3% faster than it is now (a die is about 10%)
@@ -72,6 +79,10 @@ public class PlayerCombat : MonoBehaviour
 
 		lastSafePosition = transform.position;
 		groundMask = ~LayerMask.GetMask("Player", "Enemy");   // anything solid but us and enemies is floor
+
+		// Idle or run: Player_AC switches on its "Moving" bool
+		if (animator == null)
+			animator = GetComponentInChildren<Animator>();
 
 		// Configure bullet visuals
 		bulletLine.positionCount = 2;
@@ -135,6 +146,13 @@ public class PlayerCombat : MonoBehaviour
 
 		if (bulletLine != null)
 			bulletLine.enabled = false;
+
+		// Dead (or switched off): stand still
+		if (hasMovingBool && animator != null)
+		{
+			animator.SetBool(MovingId, false);
+			animator.speed = 1f;
+		}
 	}
 
 	private void Update()
@@ -190,9 +208,10 @@ public class PlayerCombat : MonoBehaviour
 		// toward where you want to go at a limited rate, so a sharp turn has to slow down first.
 		Vector3 target = wish * topSpeed;
 		float rate = topSpeed / Mathf.Max(0.05f, accelerationTime);
-		// Slowing down (letting go, or after a sprint) is quicker than speeding up, so you don't slide
+		// Slowing down (letting go, or after a sprint) is about 3x quicker than speeding up, so you
+		// don't slide: a walk stops in a third of a second, a full sprint in under a second
 		if (target.sqrMagnitude < velocity.sqrMagnitude)
-			rate = Mathf.Max(rate, velocity.magnitude * 2f / Mathf.Max(0.05f, accelerationTime));
+			rate = Mathf.Max(rate, Mathf.Max(velocity.magnitude, moveSpeed) * 3f / Mathf.Max(0.05f, accelerationTime));
 		velocity = Vector3.MoveTowards(velocity, target, rate * Time.deltaTime);
 
 		// Gravity: pressed to the floor normally, dropping fast over a hole
@@ -209,6 +228,21 @@ public class PlayerCombat : MonoBehaviour
 		if ((hits & CollisionFlags.Sides) != 0)
 			velocity = moved;
 		CurrentSpeed = moved.magnitude;
+
+		// The run animation plays while we're actually moving, faster when sprinting
+		if (!checkedAnimator && animator != null && animator.isInitialized)
+		{
+			checkedAnimator = true;
+			foreach (AnimatorControllerParameter parameter in animator.parameters)
+				if (parameter.nameHash == MovingId && parameter.type == AnimatorControllerParameterType.Bool)
+					hasMovingBool = true;
+		}
+		if (hasMovingBool)
+		{
+			bool moving = CurrentSpeed > 0.5f;
+			animator.SetBool(MovingId, moving);
+			animator.speed = moving ? Mathf.Clamp(CurrentSpeed / moveSpeed, 0.75f, 2f) : 1f;
+		}
 
 		// Remember where we last stood on solid floor
 		if (controller.isGrounded && !OverHole())
