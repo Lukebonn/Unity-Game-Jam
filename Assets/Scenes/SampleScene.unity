@@ -661,6 +661,44 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &266631197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266631198}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &266631198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266631197}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 779649285}
+  - {fileID: 1541848904}
+  - {fileID: 1353367364}
+  - {fileID: 784123452}
+  - {fileID: 1813751014}
+  - {fileID: 1890972808}
+  - {fileID: 881413180}
+  m_Father: {fileID: 869787768}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,12 +1081,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 779649284}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 869787768}
+  m_Father: {fileID: 266631198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &779649286
 MonoBehaviour:
@@ -1063,26 +1101,94 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
   layers:
-  - name: 
-    clips: []
-    minVolume: 0
-    maxVolume: 0
-    minPitch: 0
-    maxPitch: 0
-  - name: 
-    clips: []
-    minVolume: 0
-    maxVolume: 0
-    minPitch: 0
-    maxPitch: 0
-  - name: 
-    clips: []
-    minVolume: 0
-    maxVolume: 0
-    minPitch: 0
-    maxPitch: 0
+  - name: L1 Weight
+    clips:
+    - {fileID: 8300000, guid: 861f879b5d4d94bd1b5a083e83588da7, type: 3}
+    - {fileID: 8300000, guid: b5740602413f74370aad577253457d40, type: 3}
+    - {fileID: 8300000, guid: b2931c771eac9414687bebc432cd445e, type: 3}
+    - {fileID: 8300000, guid: 7f71f84bfad344e0aab7c30782ff75b1, type: 3}
+    minVolume: 0.799
+    maxVolume: 0.951
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: L2 Splat
+    clips:
+    - {fileID: 8300000, guid: f45d0875d554f493891d728669861804, type: 3}
+    - {fileID: 8300000, guid: c862ef0a9b2784fb1997e670caaa0c65, type: 3}
+    - {fileID: 8300000, guid: 2c47a9ce4196043659ff32560a817c6a, type: 3}
+    - {fileID: 8300000, guid: 191b2422ee3bf4f3fbbed50c5f97f6c1, type: 3}
+    minVolume: 0.672
+    maxVolume: 0.828
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: L3 Buzz
+    clips:
+    - {fileID: 8300000, guid: f717479aabce54e0b943c199020f9a40, type: 3}
+    - {fileID: 8300000, guid: 1a25f36ad81884ec1beee72b97bd45b7, type: 3}
+    - {fileID: 8300000, guid: 8e1298dc4011a49518a21c238cf4a37f, type: 3}
+    - {fileID: 8300000, guid: c39be8370d1074ed3a38b9b4b522ad5e, type: 3}
+    minVolume: 1
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
   output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
-  voices: 12
+  voices: 24
+--- !u!1 &784123451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 784123452}
+  - component: {fileID: 784123453}
+  m_Layer: 0
+  m_Name: Audio_Mosquito_Easy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &784123452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784123451}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266631198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &784123453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784123451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffe006a0220d4f3baff3ce79db0d2a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
+  layers:
+  - name: Mosquito Easy
+    clips:
+    - {fileID: 8300000, guid: 2e27bc3ae45b34d58b86e8d5e7dbb82b, type: 3}
+    - {fileID: 8300000, guid: d3df6babcd8a343a681ad898877c22c9, type: 3}
+    - {fileID: 8300000, guid: cf32d4ce9353a4ba6a0a56d9e463a349, type: 3}
+    minVolume: 0.7
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
+  voices: 5
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,11 +1267,67 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 411542913}
-  - {fileID: 779649285}
-  - {fileID: 1541848904}
+  - {fileID: 1047124361}
+  - {fileID: 266631198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &881413179
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 881413180}
+  - component: {fileID: 881413181}
+  m_Layer: 0
+  m_Name: Fly_Axe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &881413180
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881413179}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266631198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &881413181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881413179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffe006a0220d4f3baff3ce79db0d2a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
+  layers:
+  - name: Fly Axe
+    clips:
+    - {fileID: 8300000, guid: fa03c84ad7e914d1e82917d1a5406daa, type: 3}
+    - {fileID: 8300000, guid: 618bcef2920a14ed79630936649f1edc, type: 3}
+    - {fileID: 8300000, guid: 72f690811abb144dcb3f87e1c2494018, type: 3}
+    - {fileID: 8300000, guid: 9fa151e3dbf7547718b3d0abebb1b9de, type: 3}
+    minVolume: 0.6
+    maxVolume: 0.9
+    minPitch: 0.95
+    maxPitch: 1.1
+  output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
+  voices: 5
 --- !u!1 &938295860
 GameObject:
   m_ObjectHideFlags: 0
@@ -1378,6 +1540,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1006905149}
   m_CullTransparentMesh: 1
+--- !u!1 &1047124360
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1047124361}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1047124361
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047124360}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 411542913}
+  m_Father: {fileID: 869787768}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1051925474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1619,6 +1813,100 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1353367363
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1353367364}
+  - component: {fileID: 1353367365}
+  m_Layer: 0
+  m_Name: Audio_Mosquito_Medium
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1353367364
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353367363}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266631198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1353367365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353367363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffe006a0220d4f3baff3ce79db0d2a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
+  layers:
+  - name: Mosquito_Med
+    clips:
+    - {fileID: 8300000, guid: f444b2805a6254202b523e603b5db4b0, type: 3}
+    - {fileID: 8300000, guid: 3e970ab642419470fbe936b393debcbc, type: 3}
+    - {fileID: 8300000, guid: c997ea96cc6ad42dd964374161761d8e, type: 3}
+    - {fileID: 8300000, guid: b92f82b106b04425cb442c2e0d0fb67b, type: 3}
+    - {fileID: 8300000, guid: 5c7d0e229273e47b2910ff53c3b40cb1, type: 3}
+    - {fileID: 8300000, guid: f7c8e2e2584284128948b94899d48ebf, type: 3}
+    - {fileID: 8300000, guid: 07f2f5797568542ed979f6cc201d7c1e, type: 3}
+    - {fileID: 8300000, guid: 9ed754aaf207d4506b5a62395a80ce87, type: 3}
+    - {fileID: 8300000, guid: 939931755e50c4cfbbeaf059631f38b1, type: 3}
+    - {fileID: 8300000, guid: 6cac50084f86246bc8d16e9e6ef1db8e, type: 3}
+    minVolume: 0.648
+    maxVolume: 0.953
+    minPitch: 0.94
+    maxPitch: 1.11
+  output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
+  voices: 5
+--- !u!1 &1534276311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1534276312}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1534276312
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534276311}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.63318, y: -0, z: 0.57539}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1541848903
 GameObject:
   m_ObjectHideFlags: 0
@@ -1630,7 +1918,7 @@ GameObject:
   - component: {fileID: 1541848904}
   - component: {fileID: 1541848905}
   m_Layer: 0
-  m_Name: Audio_EnemyFire
+  m_Name: Audio_Mosquito_Sniper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1644,12 +1932,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1541848903}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 869787768}
+  m_Father: {fileID: 266631198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1541848905
 MonoBehaviour:
@@ -1664,67 +1952,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
   layers:
-  - name: L1 PreBuzz
+  - name: Sniper
     clips:
-    - {fileID: 8300000, guid: 156be877a428343e480a1ee4c5a24769, type: 3}
-    minVolume: 0.426
-    maxVolume: 0.725
-    minPitch: 1.12
-    maxPitch: 0.94
-  - name: L2 PreLoad
-    clips:
-    - {fileID: 8300000, guid: b1af38e02c35345068212246978ab554, type: 3}
-    - {fileID: 8300000, guid: f5f75cbccb55c464ca8e42d8767be8fd, type: 3}
-    minVolume: 0.549
-    maxVolume: 0.794
-    minPitch: 1.07
-    maxPitch: 0.94
-  - name: L3 Slap
-    clips:
-    - {fileID: 8300000, guid: 79b24c3628be0459ba7069061e1ae1d4, type: 3}
-    - {fileID: 8300000, guid: c58a621138ba04d0cabfbad96c7ef178, type: 3}
-    - {fileID: 8300000, guid: fc0ddfa6e21174810984b1aa8489977f, type: 3}
-    - {fileID: 8300000, guid: 2adc355115fde4d68b520d6319b82f71, type: 3}
-    - {fileID: 8300000, guid: 9161b0a7a400548dbb1cc42e9ff83e13, type: 3}
-    minVolume: 0.672
-    maxVolume: 0.912
-    minPitch: 1.06
-    maxPitch: 0.92
-  - name: L4 Rico
-    clips:
-    - {fileID: 8300000, guid: 6818f6eb241e54ea2857cde26ede07c7, type: 3}
-    - {fileID: 8300000, guid: 13103579d191f4f8dab50b50fcace066, type: 3}
-    - {fileID: 8300000, guid: d359b1b2c6bed4e3eaa510a52dcdef9a, type: 3}
-    - {fileID: 8300000, guid: 71c89c89910784b0197abd74a836274b, type: 3}
-    - {fileID: 8300000, guid: 4f81312d9282741f9a53ec1624e2a70a, type: 3}
-    minVolume: 0.696
-    maxVolume: 0.912
-    minPitch: 1.06
-    maxPitch: 0.92
-  - name: L5 Weight
-    clips:
-    - {fileID: 8300000, guid: 98a9a20b992ea479e9e08c5444c7b595, type: 3}
-    - {fileID: 8300000, guid: 7d245362364644e1f90e48b6c5a8efee, type: 3}
-    - {fileID: 8300000, guid: 5a4b61b7da5e14ed4a9025b0d64a8fb5, type: 3}
-    - {fileID: 8300000, guid: f2635f84e6ba947ceb0218c89cb88bfc, type: 3}
-    - {fileID: 8300000, guid: 6084035474413424a95df203badbd30c, type: 3}
-    minVolume: 0.74
-    maxVolume: 0.853
-    minPitch: 1.03
-    maxPitch: 0.9
-  - name: L6 Slice
-    clips:
-    - {fileID: 8300000, guid: 607d1dedce2044ec28977407fd9a76d1, type: 3}
-    - {fileID: 8300000, guid: 5977da557d63e472cbaff76b78a9a167, type: 3}
-    - {fileID: 8300000, guid: e2744c6444fd24ec2aa5613660b49f43, type: 3}
-    - {fileID: 8300000, guid: f11e31fa3c1034bf1a74594b34b58ccd, type: 3}
-    - {fileID: 8300000, guid: 93122c4d7c867457cbe3893e70d94c44, type: 3}
-    minVolume: 0.784
-    maxVolume: 0.882
-    minPitch: 1.06
-    maxPitch: 0.94
+    - {fileID: 8300000, guid: 80a48d74358d5423093f3e83921fd996, type: 3}
+    - {fileID: 8300000, guid: 00e9c3cbab5214dc4ba60c75f92a4b8b, type: 3}
+    - {fileID: 8300000, guid: e6dc8fe261b124255b5921c669c56a45, type: 3}
+    - {fileID: 8300000, guid: 43e148080a1a846718600192138570bc, type: 3}
+    - {fileID: 8300000, guid: 0223aff222ba144c78aced42ecfbaff6, type: 3}
+    - {fileID: 8300000, guid: bbd2c6bc625d94ac386c545cbf057c57, type: 3}
+    - {fileID: 8300000, guid: 729ee0237718e4b53a028dae4af6555b, type: 3}
+    minVolume: 0.751
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
   output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
-  voices: 24
+  voices: 5
 --- !u!1 &1745479982
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,6 +2160,110 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelUp
   diceTray: {fileID: 0}
+--- !u!1 &1813751013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1813751014}
+  - component: {fileID: 1813751015}
+  m_Layer: 0
+  m_Name: Fly_Flail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1813751014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813751013}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266631198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1813751015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1813751013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffe006a0220d4f3baff3ce79db0d2a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
+  layers:
+  - name: PreGrunt
+    clips:
+    - {fileID: 8300000, guid: 9faa949b6130440b09010effefa0a722, type: 3}
+    - {fileID: 8300000, guid: bff2bc1fcfcca42efb2f1f469a32db4f, type: 3}
+    - {fileID: 8300000, guid: d5b1f0bbaa21642eebba1d4de8b1eb6b, type: 3}
+    minVolume: 0.779
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: Grunt
+    clips:
+    - {fileID: 8300000, guid: b9420bb603c93400ca809ca0aa558ec5, type: 3}
+    - {fileID: 8300000, guid: bff2bc1fcfcca42efb2f1f469a32db4f, type: 3}
+    - {fileID: 8300000, guid: d5b1f0bbaa21642eebba1d4de8b1eb6b, type: 3}
+    minVolume: 0.7
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: Exert
+    clips:
+    - {fileID: 8300000, guid: ae3b6c5470cd44dc0a003e0d1b428364, type: 3}
+    minVolume: 0.71
+    maxVolume: 0.92
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: Heavy Swing
+    clips:
+    - {fileID: 8300000, guid: 41a5f45bc6af942b6acb8873239acf8a, type: 3}
+    - {fileID: 8300000, guid: fb9b8c030945c4ae4980e214db4c8be8, type: 3}
+    minVolume: 0.7
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: swish
+    clips:
+    - {fileID: 8300000, guid: 4780e91a994dc4a16bc3e8416a2fffb7, type: 3}
+    - {fileID: 8300000, guid: d062d3038734c41e0aaf9fb74bfb6d3b, type: 3}
+    - {fileID: 8300000, guid: c4fd7af6f6fb049b5a5cd29b3fa9ef11, type: 3}
+    minVolume: 0.7
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: Chain
+    clips:
+    - {fileID: 8300000, guid: 9332fe4357c3948368b1fa366f7824f4, type: 3}
+    - {fileID: 8300000, guid: be85e6bc3bc3f4c52b636035349587ab, type: 3}
+    - {fileID: 8300000, guid: 94b9ed9b9b73c4c2ea8acc77e4c5754d, type: 3}
+    minVolume: 0.7
+    maxVolume: 1
+    minPitch: 0.94
+    maxPitch: 1.11
+  - name: grip
+    clips: []
+    minVolume: 0.5
+    maxVolume: 0.88
+    minPitch: 0.9
+    maxPitch: 1.11
+  output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
+  voices: 32
 --- !u!1 &1822055784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,6 +2340,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1822055784}
   m_CullTransparentMesh: 1
+--- !u!1 &1890972807
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1890972808}
+  - component: {fileID: 1890972809}
+  m_Layer: 0
+  m_Name: Fly_Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1890972808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890972807}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 266631198}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1890972809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1890972807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffe006a0220d4f3baff3ce79db0d2a1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LayeredSound
+  layers:
+  - name: Fly Sword
+    clips:
+    - {fileID: 8300000, guid: 9be45b7a6ab79435086d9a01af029fd0, type: 3}
+    - {fileID: 8300000, guid: 618bcef2920a14ed79630936649f1edc, type: 3}
+    - {fileID: 8300000, guid: 72f690811abb144dcb3f87e1c2494018, type: 3}
+    - {fileID: 8300000, guid: 9fa151e3dbf7547718b3d0abebb1b9de, type: 3}
+    minVolume: 0.6
+    maxVolume: 0.9
+    minPitch: 0.94
+    maxPitch: 1.1
+  output: {fileID: 8575900858586313161, guid: 0afc629454fd149d68cfeb53909ee2a1, type: 2}
+  voices: 32
 --- !u!1 &1992327737
 GameObject:
   m_ObjectHideFlags: 0
@@ -2147,7 +2550,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 869787768}
+    m_TransformParent: {fileID: 1047124361}
     m_Modifications:
     - target: {fileID: 409176591041228232, guid: ef4f065ae6f3d4c6f91f70f07022bc68, type: 3}
       propertyPath: m_Name
@@ -2338,3 +2741,4 @@ SceneRoots:
   - {fileID: 869787768}
   - {fileID: 1323986545}
   - {fileID: 1169147831}
+  - {fileID: 1534276312}
