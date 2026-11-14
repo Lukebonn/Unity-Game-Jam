@@ -3,71 +3,27 @@ using System;
 
 public class SignalBus : MonoBehaviour
 {
-    //public static event Action<int> OnLevelUp;
-    public static event Action OnLevelUp;
-    public static event Action OnEnemyDeath;
+    // Dice and the run
+    public static event Action<int, LuckyEffect> OnDieLanded;   // a die finished rolling: its number, and its lucky effect
+    public static event Action OnPlayerDied;
+    public static event Action OnEnemyDeath;                     // raised by Cash's EnemyBase
+
+    // Stats: one event per stat. The int is the number the die rolled.
     public static event Action<int> OnLvlHealth;
-    private int PSstamina;
-    public static event Action OnLvlStamina;
-    private int PSmovement;
-    public static event Action OnLvlMovement;
-    private int PSrpm;
-    public static event Action OnLvlRPM;
-    private int PSdamage;
-    public static event Action OnLvlDamage;
-    private int PSarmor;
-    public static event Action OnLvlArmor;
+    public static event Action<int> OnLvlStamina;
+    public static event Action<int> OnLvlMovement;
+    public static event Action<int> OnLvlRPM;
+    public static event Action<int> OnLvlDamage;
+    public static event Action<int> OnLvlArmor;
 
-    // Public setter functions
+    public static void InvokeDieLanded(int value, LuckyEffect effect) => OnDieLanded?.Invoke(value, effect);
+    public static void InvokePlayerDied() => OnPlayerDied?.Invoke();
+    public static void InvokeEnemyDeath() => OnEnemyDeath?.Invoke();
 
-    public static void InvokeLevelUp()
-    {
-        OnLevelUp?.Invoke();
-    }
-
-    public static void InvokeEnemyDeath()
-    {
-        OnEnemyDeath?.Invoke();
-    }
-    public static void InvokeLvlHealth(int stat)
-    {
-        OnLvlHealth?.Invoke(stat);
-    }
-
-    public void InvokeLvlStamina()
-    {
-        OnLvlStamina?.Invoke();
-    }
-
-    public void InvokeLvlMovement()
-    {
-        OnLvlMovement?.Invoke();
-    }
-
-    public void InvokeLvlRPM()
-    {
-        OnLvlRPM?.Invoke();
-    }
-
-    public void InvokeLvlDamage()
-    {
-        OnLvlDamage?.Invoke();
-    }
-
-    public void InvokeLvlArmor()
-    {
-        OnLvlArmor?.Invoke();
-    }
-
-
-    //private int currLvl = 1;
-
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Space))
-    //    {
-    //        currLvl += 1;
-    //        OnLevelUp?.Invoke(currLvl);
-    //    }
-    //}
+    public static void InvokeLvlHealth(int roll) => OnLvlHealth?.Invoke(roll);
+    public static void InvokeLvlStamina(int roll) => OnLvlStamina?.Invoke(roll);
+    public static void InvokeLvlMovement(int roll) => OnLvlMovement?.Invoke(roll);
+    public static void InvokeLvlRPM(int roll) => OnLvlRPM?.Invoke(roll);
+    public static void InvokeLvlDamage(int roll) => OnLvlDamage?.Invoke(roll);
+    public static void InvokeLvlArmor(int roll) => OnLvlArmor?.Invoke(roll);
 }

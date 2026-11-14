@@ -3,21 +3,20 @@ using System.Collections.Generic;
 
 public class UnrolledDiceUI : MonoBehaviour
 {
-    private int unRolled = 0;
     [SerializeField] private DiceUI diePrefab;
 
     private readonly List<DiceUI> dice = new List<DiceUI>();
 
     private void OnEnable()
     {
-        SignalBus.OnLevelUp += AddDie;
+        SignalBus.OnEnemyDeath += AddDie;   // every kill gives a d20
     }
     private void OnDisable()
     {
-        SignalBus.OnLevelUp -= AddDie;
+        SignalBus.OnEnemyDeath -= AddDie;
     }
 
-    private void AddDie()
+    public void AddDie()
     {
         DiceUI die = Instantiate(diePrefab, transform);
         dice.Add(die);

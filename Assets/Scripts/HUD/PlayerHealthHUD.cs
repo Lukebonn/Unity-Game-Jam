@@ -1,33 +1,48 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerHealthHUD : MonoBehaviour
 {
-    public float Health, MaxHealth, Width, Height;
-    private float levelUpIncrementPrct;
-    [SerializeField] private RectTransform HealthBar;
+    [SerializeField] private RectTransform HealthBar;    // the red fill (child)
     [SerializeField] private PlayerHealth PlayerHealth;
+    [SerializeField] private float Width = 200f;         // bar length at the starting max HP
+    [SerializeField] private float Height = 12f;
+    [SerializeField] private float MaxWidth = 600f;      // stop growing here so it stays on screen
 
-    void Update()
+    [Header("Armor, beside the bar")]
+    [SerializeField] private GameObject Armor;
+    [SerializeField] private TMP_Text ArmorValue;
+
+    private RectTransform background;
+    private int shownArmor = -1;
+
+    private void Awake()
     {
-        (Health, MaxHealth, levelUpIncrementPrct) = PlayerHealth.Health();
-        SetBar();
-    }
-    private void OnEnable()
-    {
-        SignalBus.OnLvlHealth += ExpandBar;
-    }
-    private void OnDisable()
-    {
-        SignalBus.OnLvlHealth -= ExpandBar;
+        background = (RectTransform)transform;
     }
 
-    void ExpandBar(int stat)
+    private void Start()
     {
-        Width += (Width * ((levelUpIncrementPrct * stat) / 100f));
+        // Works in any level scene: find the player if nobody dragged one in
+        if (PlayerHealth == null) PlayerHealth = FindFirstObjectByType<PlayerHealth>();
     }
-    void SetBar()
+
+    private void Update()
     {
-        float newWidth = (Health / MaxHealth) * Width;
-        HealthBar.sizeDelta = new Vector2(newWidth , Height);
+        // Only READ from PlayerHealth. All the health maths lives there.
+        float max = PlayerHealth.maxHealth;
+        float fullWidth = Mathf.Min(MaxWidth, Width * max / PlayerHealth.StartingMaxHealth);
+
+        background.sizeDelta = new Vector2(fullWidth, Height);
+        HealthBar.sizeDelta = new Vector2(fullWidth * PlayerHealth.CurrentHealth / max, Height);
+
+        // Only touch the text when the number changes
+        int armor = PlayerHealth.ArmorPercent;
+        if (armor != shownArmor)
+        {
+            shownArmor = armor;
+            ArmorValue.text = armor.ToString();
+            Armor.SetActive(armor > 0);   // the shield shows up with the first armor point
+        }
     }
 }

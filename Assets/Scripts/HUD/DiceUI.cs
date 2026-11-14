@@ -1,15 +1,18 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using TMPro;
 
+// One d20 in the tray. It shuffles numbers while it rolls, then lands on one.
 public class DiceUI : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
     [SerializeField] private Image image;
-    [SerializeField] private Sprite[] faces;
-    [SerializeField] private float rollTime;
+    [SerializeField] private TMP_Text valueText;
+    [SerializeField] private float rollTime = 1.2f;
+    [SerializeField] private Color luckyColor = new Color(1f, 0.8f, 0.2f);
 
-    public int Value {  get; private set; }
+    // What the die is worth when you spend it (10x its number on a lucky TimesTen)
+    public int Value { get; private set; }
     public bool HasLanded => Value > 0;
 
     public void Roll()
@@ -19,11 +22,26 @@ public class DiceUI : MonoBehaviour
 
     private IEnumerator RollRoutine()
     {
-        animator.enabled = true;
-        yield return new WaitForSeconds(rollTime);
-        animator.enabled = false;
+        // Shuffle random faces while it rolls
+        for (float t = 0f; t < rollTime; t += 0.08f)
+        {
+            valueText.text = Random.Range(1, LuckyNumber.Max + 1).ToString();
+            yield return new WaitForSeconds(0.08f);
+        }
 
-        Value = Random.Range(1, 7);
-        image.sprite = faces[Value - 1];
+        int rolled = Random.Range(1, LuckyNumber.Max + 1);
+
+        LuckyEffect effect = LuckyEffect.None;
+        if (rolled == LuckyNumber.Value)
+        {
+            effect = (LuckyEffect)Random.Range(1, 4);   // KillAll, TimesTen or Instakill
+            image.color = luckyColor;
+        }
+
+        Value = effect == LuckyEffect.TimesTen ? rolled * 10 : rolled;
+        valueText.text = Value.ToString();
+
+        // The roll pop (sketch F) and the lucky effects listen for this
+        SignalBus.InvokeDieLanded(rolled, effect);
     }
 }

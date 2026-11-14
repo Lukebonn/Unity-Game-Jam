@@ -1,89 +1,73 @@
-
 using UnityEngine;
-using System;
 
 public class PlayerHealth : MonoBehaviour
 {
 	public float maxHealth = 100f;
-	public int damageReductionPerHit = 0; //now a legacy variable (read below)
-	public int levelUpIncrementPrct;
+	public int levelUpIncrementPrct = 2;    // each rolled point = +2% of the STARTING max HP
+
+	[Header("Armor (damage reduction)")]
+	public float armorPercentPerPoint = 0.35f;  // d20 rolls are big, so under 1% per point
+	public int maxArmorPercent = 75;            // cap, so armor can never make you unkillable
 
 	public bool isDead;
 
-    // rolling stats (minus health ofc^)
-    private int PSlevel = 1;
-	//health is also here, but it should be noted that maxHealth is the PS variable
-	private int PSstamina;
-	private int PSmovement;
-	private int PSrpm;
-	private int PSarmor;
-	private int PSdamage;
+	// Anyone can read these, only PlayerHealth can change them.
+	public float CurrentHealth { get; private set; }
+	public float StartingMaxHealth { get; private set; }
+	public int ArmorPercent { get; private set; }
 
-
-	private float currentHealth;
-
-	void Awake()
+	private void Awake()
 	{
-		currentHealth = maxHealth;
+		StartingMaxHealth = maxHealth;
+		CurrentHealth = maxHealth;
 		isDead = false;
 	}
-
-	public void TakeDamage(int incomingDamage)
-	{
-
-		int damage = Mathf.Max(
-			0,
-			incomingDamage - damageReductionPerHit
-		);
-
-		currentHealth = Mathf.Max(
-			0,
-			currentHealth - damage
-		);
-
-		Debug.Log("Player HP: " + currentHealth);
-
-		if (currentHealth <= 0)
-		{
-			isDead = true;
-			Debug.Log("GAME OVER!");
-			GetComponent<PlayerCombat>().enabled = false;
-		}
-	}
-
-	//void OnGUI()
-	//{
-	//	GUI.Label(
-	//		new Rect(20, 20, 250, 30),
-	//		"Health: " + currentHealth + "/" + maxHealth
-	//	);
-
-	//	if (currentHealth == 0)
-	//	{
-	//		GUI.Label(
-	//			new Rect(20, 50, 300, 30),
-	//			"GAME OVER"
-	//		);
-	//	}
-	//}
 
 	private void OnEnable()
 	{
 		SignalBus.OnLvlHealth += HandleHlthLvlUp;
+		SignalBus.OnLvlArmor += HandleArmorLvlUp;
 	}
-    private void OnDisable()
-    {
-        SignalBus.OnLvlHealth -= HandleHlthLvlUp;
-    }
 
-    public (float num1, float num2, float num3) Health() { return (currentHealth, maxHealth, levelUpIncrementPrct); }
+	private void OnDisable()
+	{
+		SignalBus.OnLvlHealth -= HandleHlthLvlUp;
+		SignalBus.OnLvlArmor -= HandleArmorLvlUp;
+	}
 
-	public void HandleHlthLvlUp(int stat)
-    {
-		PSlevel += 1;
+	public void TakeDamage(int incomingDamage)
+	{
+		if (isDead) return;
 
-		maxHealth += maxHealth * (levelUpIncrementPrct / 100f);
+		// 12% armor means you take 88% of the hit
+		float damage = incomingDamage * (1f - ArmorPercent / 100f);
+		CurrentHealth = Mathf.Max(0f, CurrentHealth - damage);
 
-        Debug.Log($"Player leveled up to: {PSlevel}, Player health now: {maxHealth}");
+		Debug.Log($"Player HP: {CurrentHealth}");
+
+		if (CurrentHealth <= 0f)
+		{
+			isDead = true;
+			Debug.Log("GAME OVER!");
+			GetComponent<PlayerCombat>().enabled = false;
+			SignalBus.InvokePlayerDied();
+		}
+	}
+
+	private void HandleHlthLvlUp(int roll)
+	{
+		float gained = StartingMaxHealth * (levelUpIncrementPrct / 100f) * roll;
+		maxHealth += gained;
+		CurrentHealth += gained;   // the new part of the bar arrives full
+
+		Debug.Log($"Health +{gained}: {CurrentHealth}/{maxHealth}");
+	}
+
+	private void HandleArmorLvlUp(int roll)
+	{
+		int gained = Mathf.RoundToInt(roll * armorPercentPerPoint);
+		ArmorPercent = Mathf.Min(maxArmorPercent, ArmorPercent + gained);
+
+		Debug.Log($"Armor now {ArmorPercent}%");
 	}
 }

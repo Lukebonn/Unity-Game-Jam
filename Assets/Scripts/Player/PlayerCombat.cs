@@ -12,25 +12,40 @@ public class PlayerCombat : MonoBehaviour
 	[SerializeField] private InputActionAsset inputActions;
 
 	[Header("Movement")]
-	public float moveSpeed = 6f;
+	public float moveSpeed = 6f;                // walk speed
+	public float moveSpeedPerPoint = 0.05f;     // walk speed added per rolled point
+	public float sprintCostPerSecond = 25f;     // stamina used per second of sprinting
+	private const float SprintMultiplier = 2f;  // GDD: sprint is always double walk
 
 	[Header("Shooting")]
 	public float bulletsPerSecond = 6f;
+	public float bulletsPerSecondPerPoint = 0.08f;
 	public int damagePerBullet = 10;
+	public float damagePerPoint = 0.35f;        // rounded, so a roll of 1 adds nothing
 	public float bulletRange = 35f;
 
 	public UnityEvent OnFire;
 
+	// For the speedometer
+	public float CurrentSpeed { get; private set; }
+	public bool IsSprinting { get; private set; }
+
+	// Lucky effect: every bullet kills while this is true
+	public bool IsInstakill => Time.time < instakillUntil;
+
 	private CharacterController controller;
 	private Camera cam;
 	private LineRenderer bulletLine;
+	private PlayerStamina stamina;
 
 	private InputActionMap playerMap;
 	private InputAction moveAction;
 	private InputAction pointAction;
 	private InputAction fireAction;
+	private InputAction sprintAction;
 
 	private float nextFireTime;
+	private float instakillUntil;
 	private Coroutine bulletEffect;
 
 	private void Awake()
@@ -38,6 +53,11 @@ public class PlayerCombat : MonoBehaviour
 		controller = GetComponent<CharacterController>();
 		cam = Camera.main;
 		bulletLine = GetComponent<LineRenderer>();
+
+		// Sprint needs stamina. Add it if this player doesn't have one yet (e.g. in a new level scene).
+		stamina = GetComponent<PlayerStamina>();
+		if (stamina == null)
+			stamina = gameObject.AddComponent<PlayerStamina>();
 
 		// Configure bullet visuals
 		bulletLine.positionCount = 2;
@@ -68,12 +88,14 @@ public class PlayerCombat : MonoBehaviour
 		moveAction = playerMap.FindAction("Move");
 		pointAction = playerMap.FindAction("Point");
 		fireAction = playerMap.FindAction("Fire");
+		sprintAction = playerMap.FindAction("Sprint");
 
 		if (moveAction == null ||
 			pointAction == null ||
-			fireAction == null)
+			fireAction == null ||
+			sprintAction == null)
 		{
-			Debug.LogError("Missing Move, Point, or Fire action!");
+			Debug.LogError("Missing Move, Point, Fire or Sprint action!");
 			enabled = false;
 		}
 	}
@@ -82,12 +104,20 @@ public class PlayerCombat : MonoBehaviour
 	{
 		// Start listening for input
 		playerMap?.Enable();
+
+		SignalBus.OnLvlMovement += HandleMoveLvlUp;
+		SignalBus.OnLvlRPM += HandleRPMLvlUp;
+		SignalBus.OnLvlDamage += HandleDamageLvlUp;
 	}
 
 	private void OnDisable()
 	{
 		// Stop listening for input
 		playerMap?.Disable();
+
+		SignalBus.OnLvlMovement -= HandleMoveLvlUp;
+		SignalBus.OnLvlRPM -= HandleRPMLvlUp;
+		SignalBus.OnLvlDamage -= HandleDamageLvlUp;
 
 		if (bulletLine != null)
 			bulletLine.enabled = false;
@@ -132,9 +162,20 @@ public class PlayerCombat : MonoBehaviour
 			forward * input.y +
 			right * input.x;
 
+		// Sprint while Sprint (Left Shift) is held and we're moving. Shooting doesn't slow you.
+		bool wantsToSprint = sprintAction.IsPressed() && movement.sqrMagnitude > 0.01f;
+		IsSprinting = wantsToSprint && stamina.TryUse(sprintCostPerSecond * Time.deltaTime);
+
+		float speed = IsSprinting ? moveSpeed * SprintMultiplier : moveSpeed;
+
 		controller.SimpleMove(
-			movement.normalized * moveSpeed
+			movement.normalized * speed
 		);
+
+		// How fast we actually moved (after hitting walls), without gravity
+		Vector3 velocity = controller.velocity;
+		velocity.y = 0f;
+		CurrentSpeed = velocity.magnitude;
 	}
 
 	private Vector3 GetAimDirection()
@@ -204,7 +245,7 @@ public class PlayerCombat : MonoBehaviour
 
 			if (enemy != null)
 			{
-				enemy.TakeDamage(damagePerBullet);
+				enemy.TakeDamage(IsInstakill ? enemy.maxHealth : damagePerBullet);
 			}
 		}
 
@@ -232,5 +273,26 @@ public class PlayerCombat : MonoBehaviour
 
 		bulletLine.enabled = false;
 		bulletEffect = null;
+	}
+
+	// SignalBus listeners. The int is the number the die rolled.
+	private void HandleMoveLvlUp(int roll)
+	{
+		moveSpeed += roll * moveSpeedPerPoint;
+	}
+
+	private void HandleRPMLvlUp(int roll)
+	{
+		bulletsPerSecond += roll * bulletsPerSecondPerPoint;
+	}
+
+	private void HandleDamageLvlUp(int roll)
+	{
+		damagePerBullet += Mathf.RoundToInt(roll * damagePerPoint);
+	}
+
+	public void StartInstakill(float seconds)
+	{
+		instakillUntil = Time.time + seconds;
 	}
 }
