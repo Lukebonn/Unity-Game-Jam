@@ -58,6 +58,22 @@ public class PlayerStamina : MonoBehaviour
         return true;
     }
 
+    // Spends a fixed chunk (a dash) only if there's enough. Returns false if not.
+    public bool TrySpend(float amount)
+    {
+        if (exhausted || CurrentStamina < amount) return false;
+
+        CurrentStamina -= amount;
+        lastUsedTime = Time.time;
+
+        if (CurrentStamina <= 0f)
+        {
+            CurrentStamina = 0f;
+            exhausted = true;
+        }
+        return true;
+    }
+
     private void HandleStaminaLvlUp(int roll)
     {
         float gained = StartingMaxStamina * (levelUpIncrementPrct / 100f) * roll;

@@ -56,17 +56,20 @@ public abstract class EnemyRangedAI : EnemyBase
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction),
             Time.deltaTime * 10f);
 
+        bool blocked = PillarBlocks(player.transform.position);
         Vector3 movement = Vector3.zero;
         if (!firing)
         {
-            if (distance > idealRange) movement = direction;
+            // Too far away, or a pillar in the way: follow the NavMesh path closer
+            if (distance > idealRange || blocked) movement = PathDirectionTo(player.transform.position);
             else if (distance < minRange) movement = -direction;
             else movement = Vector3.Cross(Vector3.up, direction) * strafeDirection * strafeWeight;
         }
         controller.SimpleMove(movement * moveSpeed);
 
+        // Only shoot along a clear line, so shots aren't wasted on pillars
         if (distance <= maxRange && distance >= minRange * 0.65f &&
-            Time.time >= nextShotTime && !firing)
+            Time.time >= nextShotTime && !firing && !blocked)
         {
             nextShotTime = Time.time + Mathf.Max(0.1f, fireCooldown);
             StartCoroutine(FireRoutine());

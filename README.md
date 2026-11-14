@@ -46,7 +46,7 @@ flowchart LR
     SHUD["HUD/StaminaHUD.cs"] -->|"reads stamina every frame"| PS["Player/PlayerStamina.cs"]
     SPD["HUD/SpeedHUD.cs"] -->|"reads CurrentSpeed, IsSprinting"| PC["Player/PlayerCombat.cs"]
     GUN["HUD/GunHUD.cs"] -->|"reads fire rate, damage, IsInstakill"| PC
-    PC -->|"sprinting: TryUse()"| PS
+    PC -->|"sprint: TryUse(), dash: TrySpend()"| PS
     PH -->|"HP reaches 0: disables"| PC
     PC ==>|"OnFire (UnityEvent, wired in Inspector)"| LS["Audio/LayeredSound.cs<br/>(Audio_PlayFire prefab)"]
     PC -->|"bullet raycast hits: TakeDamage()"| EB["Enemies/EnemyBase.cs (abstract)"]
@@ -55,7 +55,9 @@ flowchart LR
     AI -->|"ranged: Initialize()"| PROJ["Enemies/EnemyProjectile.cs"]
     PROJ -->|"hits: TakeDamage()"| PH
     WS["Enemies/WaveSpawner.cs<br/>(WaveManager)"] -->|"spawns, then Apply()"| ESC["Enemies/EnemyScaler.cs"]
+    WS -->|"reads counts and intervals per wave"| WP["Enemies/WavePlan.cs<br/>(SampleScene Waves asset)"]
     EB ==>|"OnAnyEnemyDied (its own static event)"| WS
+    EB -->|"PathDirectionTo(): walks around pillars"| NAV["NavMesh baked on Arena<br/>(ground + pillars)"]
     LU["Player/LevelUp.cs"] -->|"keys 1-6: TrySpendDie() until none landed"| TRAY["HUD/UnrolledDiceUI.cs"]
     TRAY -->|"spawns, Roll()"| DIE["HUD/DiceUI.cs<br/>(Die prefab, a d20)"]
     DIE -->|"is it the lucky number?"| LN["Dice/LuckyNumber.cs<br/>(static, saved with PlayerPrefs)"]
@@ -124,3 +126,9 @@ flowchart LR
 - Build order: scene 0 is `MainMenu`, scene 1 is the game (`SampleScene` for now). The menu's Play loads scene 1 and Esc or the game-over Main Menu button loads scene 0, by number rather than name, so a renamed or replaced level scene still works.
 - `Prefabs/HUD.prefab` is the whole game Canvas (bars, speedometer, gun readouts, level badge, roll pop, timer, dice tray, game over). `Prefabs/GameManager.prefab` holds GameManager, SignalBus and LuckyEffects.
 - To use them in another level scene, drop both prefabs in. Their scripts find the Player, GameManager and WaveSpawner on their own if nothing is dragged into those fields, and PlayerCombat adds a PlayerStamina to the player if it's missing.
+- Waves: the WaveManager's **Wave Plan** field takes a Wave Plan asset (Create > Remus > Wave Plan). Each wave lists enemy prefabs with counts, the seconds between spawns, a time limit and the break after it. After the last wave the last one repeats, and EnemyScaler keeps making it tougher. Leave the field empty to use the automatic waves instead.
+- Arena: `Arena` holds the 240 m ground, the `Pillar` prefab instances (1 x 1 x 8 m, layer Pillar) and the `Trench` prefab instances. Its NavMeshSurface bakes the NavMesh that enemies path along (from colliders), so after moving or adding pillars or trenches press **Bake** on the Arena's NavMeshSurface.
+- Trenches: scale a `Trench` instance's X for width and Z for length. It's a dark ditch plus an invisible 0.5 m wall on the Trench layer: walking stops at it, bullets fly over it, and the NavMesh marks it Not Walkable so enemies go around.
+- Dash: Space (the input asset's Jump action) in PlayerCombat. It costs 30 stamina, travels 6 m (further as the speed stat grows), and ignores the Trench layer while dashing, so it's how the player gets over trenches. The player is on the Player layer for this.
+- Enemies: all 8 types have prefabs in `Prefabs/Enemies`. FlyAxe, FlyFlail, MosquitoAssault and MosquitoSniper use keyframeguy's rigs but have no animation controllers yet.
+- Outlines: `PC_Renderer` and `Mobile_Renderer` have two Render Objects passes. "Pillar Stencil" marks pillar pixels, then "Enemy Outline Through Pillars" draws Enemy-layer objects behind those pixels with `Material/EnemyXRay`. Enemies put themselves on the Enemy layer in `EnemyBase.Awake`.

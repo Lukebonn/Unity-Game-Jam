@@ -13,6 +13,7 @@ public class SpeedHUD : MonoBehaviour
     [SerializeField] private float numberScale = 3.6f;    // m/s to km/h
     [SerializeField] private Color walkColor = new Color(1f, 0.85f, 0.45f);
     [SerializeField] private Color sprintColor = new Color(1f, 0.4f, 0.1f);
+    [SerializeField] private Color dashColor = new Color(0.4f, 0.9f, 1f);
 
     private int shownSpeed = -1;
 
@@ -27,7 +28,7 @@ public class SpeedHUD : MonoBehaviour
         float speed = player.CurrentSpeed;
         ring.fillAmount = Mathf.Clamp01(speed / topSpeed) * maxFill;
 
-        Color color = player.IsSprinting ? sprintColor : walkColor;
+        Color color = player.IsDashing ? dashColor : player.IsSprinting ? sprintColor : walkColor;
         ring.color = color;
         speedValue.color = color;
 

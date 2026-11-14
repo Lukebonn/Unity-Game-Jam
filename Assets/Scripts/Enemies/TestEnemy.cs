@@ -46,7 +46,7 @@ public class TestEnemy : EnemyBase
 		if (distance > stopDistance)
 		{
 			controller.SimpleMove(
-				direction * moveSpeed
+				PathDirectionTo(player.transform.position) * moveSpeed
 			);
 		}
 		else

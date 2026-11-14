@@ -17,6 +17,12 @@ public class PlayerCombat : MonoBehaviour
 	public float sprintCostPerSecond = 25f;     // stamina used per second of sprinting
 	private const float SprintMultiplier = 2f;  // GDD: sprint is always double walk
 
+	[Header("Dash (Space, the Jump action)")]
+	public float dashDistance = 6f;             // clears a 3 m trench; grows with the speed stat
+	public float dashDuration = 0.18f;
+	public float dashStaminaCost = 30f;         // GDD: a jump takes a chunk of stamina
+	public float dashCooldown = 0.35f;
+
 	[Header("Shooting")]
 	public float bulletsPerSecond = 6f;
 	public float bulletsPerSecondPerPoint = 0.08f;
@@ -29,6 +35,7 @@ public class PlayerCombat : MonoBehaviour
 	// For the speedometer
 	public float CurrentSpeed { get; private set; }
 	public bool IsSprinting { get; private set; }
+	public bool IsDashing { get; private set; }
 
 	// Lucky effect: every bullet kills while this is true
 	public bool IsInstakill => Time.time < instakillUntil;
@@ -43,6 +50,14 @@ public class PlayerCombat : MonoBehaviour
 	private InputAction pointAction;
 	private InputAction fireAction;
 	private InputAction sprintAction;
+	private InputAction dashAction;
+
+	private Vector3 lastMoveDirection;
+	private Vector3 dashDirection;
+	private float dashEndTime;
+	private float nextDashTime;
+	private float startingMoveSpeed;
+	private int trenchLayer = -1;
 
 	private float nextFireTime;
 	private float instakillUntil;
@@ -58,6 +73,10 @@ public class PlayerCombat : MonoBehaviour
 		stamina = GetComponent<PlayerStamina>();
 		if (stamina == null)
 			stamina = gameObject.AddComponent<PlayerStamina>();
+
+		startingMoveSpeed = moveSpeed;
+		trenchLayer = LayerMask.NameToLayer("Trench");
+		SetTrenchCollision(true);
 
 		// Configure bullet visuals
 		bulletLine.positionCount = 2;
@@ -89,6 +108,7 @@ public class PlayerCombat : MonoBehaviour
 		pointAction = playerMap.FindAction("Point");
 		fireAction = playerMap.FindAction("Fire");
 		sprintAction = playerMap.FindAction("Sprint");
+		dashAction = playerMap.FindAction("Jump");   // Space: dash (optional, so not in the check below)
 
 		if (moveAction == null ||
 			pointAction == null ||
@@ -121,6 +141,13 @@ public class PlayerCombat : MonoBehaviour
 
 		if (bulletLine != null)
 			bulletLine.enabled = false;
+
+		// Never leave trench walls switched off (e.g. dying mid-dash)
+		if (IsDashing)
+		{
+			IsDashing = false;
+			SetTrenchCollision(true);
+		}
 	}
 
 	private void Update()
@@ -128,7 +155,16 @@ public class PlayerCombat : MonoBehaviour
 		if (cam == null)
 			return;
 
-		HandleMovement();
+		if (IsDashing)
+		{
+			UpdateDash();
+		}
+		else
+		{
+			HandleMovement();
+			if (dashAction != null && dashAction.WasPressedThisFrame())
+				TryDash(lastMoveDirection);
+		}
 
 		Vector3 aimDirection = GetAimDirection();
 
@@ -161,6 +197,7 @@ public class PlayerCombat : MonoBehaviour
 		Vector3 movement =
 			forward * input.y +
 			right * input.x;
+		lastMoveDirection = movement;
 
 		// Sprint while Sprint (Left Shift) is held and we're moving. Shooting doesn't slow you.
 		bool wantsToSprint = sprintAction.IsPressed() && movement.sqrMagnitude > 0.01f;
@@ -294,5 +331,52 @@ public class PlayerCombat : MonoBehaviour
 	public void StartInstakill(float seconds)
 	{
 		instakillUntil = Time.time + seconds;
+	}
+
+	// Dash: a quick burst in the direction you're moving (or facing) that carries you over trenches.
+	public bool TryDash(Vector3 direction)
+	{
+		if (IsDashing || Time.time < nextDashTime) return false;
+		direction.y = 0f;
+		if (direction.sqrMagnitude < 0.01f) direction = transform.forward;
+		if (!stamina.TrySpend(dashStaminaCost)) return false;
+
+		dashDirection = direction.normalized;
+		dashEndTime = Time.time + dashDuration;
+		IsDashing = true;
+		SetTrenchCollision(false);   // pass over trench walls while dashing
+		return true;
+	}
+
+	private void UpdateDash()
+	{
+		// GDD: the speed stat also makes the jump go further
+		float speed = dashDistance * (moveSpeed / startingMoveSpeed) / dashDuration;
+		controller.Move(dashDirection * speed * Time.deltaTime);
+		CurrentSpeed = speed;
+
+		if (Time.time < dashEndTime) return;
+
+		// Still over a trench? Keep going until we're across instead of landing in it
+		if (OverTrench() && Time.time < dashEndTime + 0.3f) return;
+
+		IsDashing = false;
+		nextDashTime = Time.time + dashCooldown;
+		SetTrenchCollision(true);
+	}
+
+	private bool OverTrench()
+	{
+		if (trenchLayer < 0) return false;
+		Vector3 centre = transform.position + controller.center;
+		float half = Mathf.Max(0f, controller.height / 2f - controller.radius);
+		return Physics.CheckCapsule(centre + Vector3.up * half, centre - Vector3.up * half,
+			controller.radius, 1 << trenchLayer, QueryTriggerInteraction.Ignore);
+	}
+
+	private void SetTrenchCollision(bool collide)
+	{
+		if (trenchLayer >= 0)
+			Physics.IgnoreLayerCollision(gameObject.layer, trenchLayer, !collide);
 	}
 }

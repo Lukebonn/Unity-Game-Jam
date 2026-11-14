@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5236192303550466006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5445503022470718935}
+  - component: {fileID: 2310382597993983832}
+  - component: {fileID: 4136142912019514038}
+  m_Layer: 0
+  m_Name: FlyFlail
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5445503022470718935
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236192303550466006}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 406778658574416664}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &2310382597993983832
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236192303550466006}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4136142912019514038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5236192303550466006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83272b8d422d2c5449fec004c7fff2fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FlyFlailEnemy
+  maxHealth: 80
+  dicePrefab: {fileID: 0}
+  diceSpawnOffset: {x: 0, y: 1, z: 0}
+  moveSpeed: 3
+  rotationSpeed: 12
+  stopDistance: 2.1
+  attackStyle: 1
+  damagePerHit: 13
+  attackRange: 2.8
+  hitArcDegrees: 170
+  windupSeconds: 0.65
+  recoverySeconds: 0.45
+  attackCooldown: 1.3
+  leapDistance: 4
+  leapDuration: 0.3
+  animator: {fileID: 0}
+  visualRoot: {fileID: 0}
+--- !u!1001 &157505545743686899
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5445503022470718935}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.7528896
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3.7528896
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3.7528896
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.033396244
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.3276758
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.39191526
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_Name
+      value: Fly-Medium_Flail Variant_Rig
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+--- !u!4 &406778658574416664 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+  m_PrefabInstance: {fileID: 157505545743686899}
+  m_PrefabAsset: {fileID: 0}

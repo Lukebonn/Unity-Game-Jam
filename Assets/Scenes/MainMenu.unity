@@ -1396,7 +1396,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 60}
-  m_SizeDelta: {x: 1400, y: 180}
+  m_SizeDelta: {x: 1400, y: 200}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1656983441
 MonoBehaviour:
@@ -1418,16 +1418,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'WASD move  |  Mouse aim  |  Left click shoot  |  Left Shift sprint
+  m_text: 'WASD move  |  Mouse aim  |  Left click shoot
 
-    1-6
-    or numpad 1-6 (Num Lock on) puts every landed die into one stat:
+    Left Shift sprint  | 
+    Space dash (clears trenches)
 
-    1 Health  
-    2 Stamina   3 Speed   4 Fire rate   5 Damage   6 Armor
+    1-6 or numpad 1-6 (Num Lock on) puts every
+    landed die into one stat:
 
-    Roll your lucky number
-    for a surprise  |  Esc returns here'
+    1 Health   2 Stamina   3 Speed   4 Fire rate  
+    5 Damage   6 Armor
+
+    Roll your lucky number for a surprise  |  Esc returns
+    here'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

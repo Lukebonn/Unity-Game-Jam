@@ -55,9 +55,6 @@ public abstract class EnemyMeleeAI : EnemyBase
         Vector3 direction = player.transform.position - transform.position;
         direction.y = 0f;
         float distance = direction.magnitude;
-        if (distance > 0.05f && !attacking)
-            transform.rotation = Quaternion.Slerp(transform.rotation,
-                Quaternion.LookRotation(direction), Time.deltaTime * rotationSpeed);
 
         if (attacking)
         {
@@ -65,7 +62,14 @@ public abstract class EnemyMeleeAI : EnemyBase
             return;
         }
 
-        controller.SimpleMove(distance > stopDistance ? direction.normalized * moveSpeed : Vector3.zero);
+        // Follow the NavMesh path so pillars get walked around, and face the way we're walking
+        Vector3 move = distance > stopDistance ? PathDirectionTo(player.transform.position) : Vector3.zero;
+        Vector3 face = move.sqrMagnitude > 0.01f ? move : direction;
+        if (face.sqrMagnitude > 0.0025f)
+            transform.rotation = Quaternion.Slerp(transform.rotation,
+                Quaternion.LookRotation(face), Time.deltaTime * rotationSpeed);
+
+        controller.SimpleMove(move * moveSpeed);
         if (distance <= attackRange && Time.time >= nextAttackTime)
         {
             nextAttackTime = Time.time + Mathf.Max(0.1f, attackCooldown);

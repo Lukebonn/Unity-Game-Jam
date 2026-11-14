@@ -43,10 +43,15 @@ public abstract class EnemyDashAI : EnemyBase
         Vector3 toward = player.transform.position - transform.position;
         toward.y = 0f;
         float distance = toward.magnitude;
-        if (distance > 0.05f) transform.rotation = Quaternion.LookRotation(toward);
 
-        controller.SimpleMove(distance > comfortableDistance ? toward.normalized * moveSpeed : Vector3.zero);
-        if (distance <= dashTriggerRange && Time.time >= nextDashTime)
+        // Follow the NavMesh path so pillars get walked around
+        Vector3 move = distance > comfortableDistance ? PathDirectionTo(player.transform.position) : Vector3.zero;
+        Vector3 face = move.sqrMagnitude > 0.01f ? move : toward;
+        if (face.sqrMagnitude > 0.0025f) transform.rotation = Quaternion.LookRotation(face);
+
+        controller.SimpleMove(move * moveSpeed);
+        // Only dash along a clear straight line, never into a pillar
+        if (distance <= dashTriggerRange && Time.time >= nextDashTime && !PillarBlocks(player.transform.position))
         {
             nextDashTime = Time.time + Mathf.Max(0.1f, dashCooldown);
             StartCoroutine(DashRoutine(player.transform.position));
