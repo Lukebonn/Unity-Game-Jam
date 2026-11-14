@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 
-// Time survived so far, under the roll pop. GameManager owns the number.
+// Time survived so far, big at the bottom of the screen. GameManager owns the number.
 public class SurvivalTimerHUD : MonoBehaviour
 {
     [SerializeField] private GameManager game;

@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerStamina : MonoBehaviour
 {
     public float maxStamina = 100f;
-    public int levelUpIncrementPrct = 2;   // same rule as health: +2% of starting max per point
+    public int levelUpIncrementPrct = 5;   // same rule as health: +5% of starting max per point
     public float regenPerSecond = 30f;
     public float regenDelay = 0.75f;       // seconds after the last use before it refills
     [Range(0f, 1f)] public float recoverAt = 0.25f;   // after running dry, sprint again at 25%

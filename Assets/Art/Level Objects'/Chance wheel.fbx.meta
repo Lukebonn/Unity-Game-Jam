@@ -3,7 +3,17 @@ guid: be7efa73397a1624785e78ab19a0d02a
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chance wheel
+    second: {fileID: 2100000, guid: 531add720b7f4024c9ee3df5e253319a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Chance wheel base
+    second: {fileID: 2100000, guid: ede44132b99b39948a5cdb92db2566d3, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

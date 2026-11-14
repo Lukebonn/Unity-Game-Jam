@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,14 +16,25 @@ public abstract class EnemyBase : MonoBehaviour
 	private Vector3 diceSpawnOffset =
 		new Vector3(0f, 1f, 0f);
 
+	[Header("Health Bar")]
+	[Tooltip("How far above the enemy's centre its health bar floats, in metres")]
+	public float healthBarHeight = 1.6f;
+
 	// Lets the wave spawner know when an enemy dies.
 	public static event Action<EnemyBase> OnAnyEnemyDied;
 
+	// Every enemy that's alive, for the health bars over their heads
+	public static readonly List<EnemyBase> All = new List<EnemyBase>();
+
 	public bool IsDead => isDead;
+	public float HealthFraction => (float)currentHealth / Mathf.Max(1, maxHealth);
 
 	protected int currentHealth;
 	protected PlayerHealth player;
 	protected bool isDead = false;
+
+	protected virtual void OnEnable() => All.Add(this);
+	protected virtual void OnDisable() => All.Remove(this);
 
 	protected virtual void Awake()
 	{
@@ -93,7 +105,7 @@ public abstract class EnemyBase : MonoBehaviour
 		//Notify the wave spawner.
 		OnAnyEnemyDied?.Invoke(this);
 
-		SignalBus.InvokeEnemyDeath();
+		SignalBus.InvokeEnemyDeath(transform.position);
 
 		Destroy(gameObject);
 	}

@@ -75,6 +75,7 @@ MonoBehaviour:
   maxHealth: 35
   dicePrefab: {fileID: 0}
   diceSpawnOffset: {x: 0, y: 1, z: 0}
+  healthBarHeight: 1.2
   moveSpeed: 4.5
   rotationSpeed: 12
   stopDistance: 1.1
@@ -187,6 +188,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3494512969635678057}
     m_Modifications:
+    - target: {fileID: -8788787127407815419, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_LocalScale.x
       value: 4.809554
@@ -205,7 +210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.1315107
+      value: -8.96
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -239,14 +244,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7160785221591329414, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6042434249599562301, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3987917340397895896, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1820551133848107933, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_Name
       value: Fly-easy_Rig
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868681554365389980, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 33b1ee16a31e52940b5f64aba80e77ea, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6720887076979485700, guid: 1c093bb8bd1519445801e0efb4def42b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

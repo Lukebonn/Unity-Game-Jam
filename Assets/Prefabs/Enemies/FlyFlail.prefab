@@ -74,6 +74,7 @@ MonoBehaviour:
   maxHealth: 80
   dicePrefab: {fileID: 0}
   diceSpawnOffset: {x: 0, y: 1, z: 0}
+  healthBarHeight: 1.2
   moveSpeed: 3
   rotationSpeed: 12
   stopDistance: 2.1
@@ -114,7 +115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.3276758
+      value: -3.53691
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
       propertyPath: m_LocalPosition.z
@@ -148,9 +149,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7827737468733342787, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5412844035105586442, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5247896351261110363, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4049048355805087959, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3291363783282113669, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -38933581381144587, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
       propertyPath: m_Name
       value: Fly-Medium_Flail Variant_Rig
+      objectReference: {fileID: 0}
+    - target: {fileID: 1951176498653228249, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2361229872277428200, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3234728854083799435, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4461643662342404053, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5085436368460507635, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7650282299100706190, guid: 709d5bd7c0a4fcb44ba96c99d2638998, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

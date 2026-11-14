@@ -74,6 +74,7 @@ MonoBehaviour:
   maxHealth: 90
   dicePrefab: {fileID: 0}
   diceSpawnOffset: {x: 0, y: 1, z: 0}
+  healthBarHeight: 1.2239169
   moveSpeed: 3.4
   rotationSpeed: 12
   stopDistance: 1.5
@@ -114,7 +115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.3738737
+      value: -3.38369
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -148,9 +149,61 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8453586106664624800, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6642628872671563224, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6415003923861595109, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -5574563105811030472, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4758756731989223549, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3757633931201131972, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2559234642956785695, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1452708364887983874, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -535782135049256244, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
       propertyPath: m_Name
       value: Fly-Medium_Axe Variant_Rig
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180224427753554123, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5042509138414870589, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_CullingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 1be763b5d5f201844a2eb32ff29cb58b, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

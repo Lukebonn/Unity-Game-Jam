@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,17 +14,13 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Time.deltaTime is 0 while the pause menu is open, so the clock stops too
         if (!player.isDead)
         {
             SurvivedSeconds += Time.deltaTime;
         }
 
-        // Leave the run. This isn't a pause: the GDD says there's no pause.
-        // Scene 0 in Build Profiles is the main menu.
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SceneManager.LoadScene(0);
-        }
+        // (Esc is the pause menu now: see Menus/PauseMenu.cs)
 
 #if UNITY_EDITOR
         // Debug key, left out of builds: Enter adds a die to the tray

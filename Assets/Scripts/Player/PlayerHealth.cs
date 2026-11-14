@@ -3,10 +3,10 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
 	public float maxHealth = 100f;
-	public int levelUpIncrementPrct = 2;    // each rolled point = +2% of the STARTING max HP
+	public int levelUpIncrementPrct = 5;    // each rolled point = +5% of the STARTING max HP
 
 	[Header("Armor (damage reduction)")]
-	public float armorPercentPerPoint = 0.35f;  // d20 rolls are big, so under 1% per point
+	public float armorPercentPerPoint = 1f;     // 1% less damage per rolled point
 	public int maxArmorPercent = 75;            // cap, so armor can never make you unkillable
 
 	public bool isDead;

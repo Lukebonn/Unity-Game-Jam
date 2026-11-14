@@ -13,21 +13,25 @@ public class PlayerCombat : MonoBehaviour
 
 	[Header("Movement")]
 	public float moveSpeed = 6f;                // walk speed
-	public float moveSpeedPerPoint = 0.05f;     // walk speed added per rolled point
+	public float moveSpeedPerPoint = 0.15f;     // walk speed added per rolled point (d6)
 	public float sprintCostPerSecond = 25f;     // stamina used per second of sprinting
 	private const float SprintMultiplier = 2f;  // GDD: sprint is always double walk
 
 	[Header("Dash (Space, the Jump action)")]
-	public float dashDistance = 6f;             // clears a 3 m trench; grows with the speed stat
-	public float dashDuration = 0.18f;
+	public float dashDistance = 24f;            // jumps the holes in the floor; grows with the speed stat
+	public float dashDuration = 0.4f;
 	public float dashStaminaCost = 30f;         // GDD: a jump takes a chunk of stamina
 	public float dashCooldown = 0.35f;
+	public UnityEvent OnDash;                   // wired to the dash sound in the Inspector
+
+	[Header("Holes in the floor")]
+	public int fallDamage = 10;                 // HP lost for falling into a hole
 
 	[Header("Shooting")]
 	public float bulletsPerSecond = 6f;
-	public float bulletsPerSecondPerPoint = 0.08f;
+	public float bulletsPerSecondPerPoint = 0.25f;
 	public int damagePerBullet = 10;
-	public float damagePerPoint = 0.35f;        // rounded, so a roll of 1 adds nothing
+	public float damagePerPoint = 1f;
 	public float bulletRange = 35f;
 
 	public UnityEvent OnFire;
@@ -57,7 +61,8 @@ public class PlayerCombat : MonoBehaviour
 	private float dashEndTime;
 	private float nextDashTime;
 	private float startingMoveSpeed;
-	private int trenchLayer = -1;
+	private Vector3 lastSafePosition;           // the last spot with floor under us, to climb back out of a hole
+	private int groundMask;
 
 	private float nextFireTime;
 	private float instakillUntil;
@@ -75,8 +80,8 @@ public class PlayerCombat : MonoBehaviour
 			stamina = gameObject.AddComponent<PlayerStamina>();
 
 		startingMoveSpeed = moveSpeed;
-		trenchLayer = LayerMask.NameToLayer("Trench");
-		SetTrenchCollision(true);
+		lastSafePosition = transform.position;
+		groundMask = ~LayerMask.GetMask("Player", "Enemy");   // anything solid but us and enemies is floor
 
 		// Configure bullet visuals
 		bulletLine.positionCount = 2;
@@ -142,17 +147,12 @@ public class PlayerCombat : MonoBehaviour
 		if (bulletLine != null)
 			bulletLine.enabled = false;
 
-		// Never leave trench walls switched off (e.g. dying mid-dash)
-		if (IsDashing)
-		{
-			IsDashing = false;
-			SetTrenchCollision(true);
-		}
+		IsDashing = false;   // e.g. dying mid-dash
 	}
 
 	private void Update()
 	{
-		if (cam == null)
+		if (cam == null || PauseMenu.IsPaused)
 			return;
 
 		if (IsDashing)
@@ -165,6 +165,10 @@ public class PlayerCombat : MonoBehaviour
 			if (dashAction != null && dashAction.WasPressedThisFrame())
 				TryDash(lastMoveDirection);
 		}
+
+		// Safety net: fell off the world somewhere a hole's trigger didn't catch
+		if (transform.position.y < -20f)
+			ClimbOutOfHole();
 
 		Vector3 aimDirection = GetAimDirection();
 
@@ -213,6 +217,10 @@ public class PlayerCombat : MonoBehaviour
 		Vector3 velocity = controller.velocity;
 		velocity.y = 0f;
 		CurrentSpeed = velocity.magnitude;
+
+		// Remember where we last stood on solid floor
+		if (controller.isGrounded && !OverHole())
+			lastSafePosition = transform.position;
 	}
 
 	private Vector3 GetAimDirection()
@@ -333,7 +341,7 @@ public class PlayerCombat : MonoBehaviour
 		instakillUntil = Time.time + seconds;
 	}
 
-	// Dash: a quick burst in the direction you're moving (or facing) that carries you over trenches.
+	// Dash: a quick burst in the direction you're moving (or facing) that carries you over holes.
 	public bool TryDash(Vector3 direction)
 	{
 		if (IsDashing || Time.time < nextDashTime) return false;
@@ -344,7 +352,7 @@ public class PlayerCombat : MonoBehaviour
 		dashDirection = direction.normalized;
 		dashEndTime = Time.time + dashDuration;
 		IsDashing = true;
-		SetTrenchCollision(false);   // pass over trench walls while dashing
+		OnDash?.Invoke();
 		return true;
 	}
 
@@ -352,31 +360,36 @@ public class PlayerCombat : MonoBehaviour
 	{
 		// GDD: the speed stat also makes the jump go further
 		float speed = dashDistance * (moveSpeed / startingMoveSpeed) / dashDuration;
-		controller.Move(dashDirection * speed * Time.deltaTime);
+		controller.Move(dashDirection * speed * Time.deltaTime);   // no gravity, so it flies over holes
 		CurrentSpeed = speed;
 
 		if (Time.time < dashEndTime) return;
 
-		// Still over a trench? Keep going until we're across instead of landing in it
-		if (OverTrench() && Time.time < dashEndTime + 0.3f) return;
+		// Still over a hole? Keep going until there's floor under us instead of dropping in
+		if (OverHole() && Time.time < dashEndTime + 0.3f) return;
 
 		IsDashing = false;
 		nextDashTime = Time.time + dashCooldown;
-		SetTrenchCollision(true);
 	}
 
-	private bool OverTrench()
+	// True when there's no floor right under the middle of the player
+	private bool OverHole()
 	{
-		if (trenchLayer < 0) return false;
 		Vector3 centre = transform.position + controller.center;
-		float half = Mathf.Max(0f, controller.height / 2f - controller.radius);
-		return Physics.CheckCapsule(centre + Vector3.up * half, centre - Vector3.up * half,
-			controller.radius, 1 << trenchLayer, QueryTriggerInteraction.Ignore);
+		return !Physics.Raycast(centre, Vector3.down, controller.height / 2f + 0.5f,
+			groundMask, QueryTriggerInteraction.Ignore);
 	}
 
-	private void SetTrenchCollision(bool collide)
+	// A Trench calls this when the player falls in: back to the last safe spot, minus some HP
+	public void ClimbOutOfHole()
 	{
-		if (trenchLayer >= 0)
-			Physics.IgnoreLayerCollision(gameObject.layer, trenchLayer, !collide);
+		controller.enabled = false;   // a CharacterController ignores teleports while it's on
+		transform.position = lastSafePosition;
+		controller.enabled = true;
+		IsDashing = false;
+
+		PlayerHealth health = GetComponent<PlayerHealth>();
+		if (health != null)
+			health.TakeDamage(fallDamage);
 	}
 }

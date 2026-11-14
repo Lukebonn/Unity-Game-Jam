@@ -3,7 +3,12 @@ guid: 927e76b3650bda24d96f392b406d9992
 ModelImporter:
   serializedVersion: 24300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Routleee Table
+    second: {fileID: 2100000, guid: 03437e2287d8a4a4fb7d9c777c778f26, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
