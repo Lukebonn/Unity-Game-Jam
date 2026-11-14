@@ -1,0 +1,120 @@
+newmtl Chain
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Chain_Albedo.png
+map_bump fly medium_Chain_Normal.png
+newmtl Flail_head
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Flail head_Albedo.png
+map_bump fly medium_Flail head_Normal.png
+newmtl Fly-Medium-Body
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-Body_Albedo.png
+map_bump fly medium_Fly-Medium-Body_Normal.png
+newmtl Fly-Medium-LEye
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-LEye_Albedo.png
+map_bump fly medium_Fly-Medium-LEye_Normal.png
+newmtl Fly-Medium-LLeg
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-LLeg_Albedo.png
+map_bump fly medium_Fly-Medium-LLeg_Normal.png
+newmtl Fly-Medium-LMandible
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-LMandible_Albedo.png
+map_bump fly medium_Fly-Medium-LMandible_Normal.png
+newmtl Fly-Medium-LWing
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-LWing_Albedo.png
+map_bump fly medium_Fly-Medium-LWing_Normal.png
+newmtl Fly-Medium-REye
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-REye_Albedo.png
+map_bump fly medium_Fly-Medium-REye_Normal.png
+newmtl Fly-Medium-RLeg
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-RLeg_Albedo.png
+map_bump fly medium_Fly-Medium-RLeg_Normal.png
+newmtl Fly-Medium-RMandable
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-RMandable_Albedo.png
+map_bump fly medium_Fly-Medium-RMandable_Normal.png
+newmtl Fly-Medium-RWing
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Fly-Medium-RWing_Albedo.png
+map_bump fly medium_Fly-Medium-RWing_Normal.png
+newmtl Handle
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly medium_Handle_Albedo.png
+map_bump fly medium_Handle_Normal.png

@@ -1,0 +1,140 @@
+newmtl Mos-easy-EyeL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-EyeL_Albedo.png
+map_bump mosuito easy_Mos-easy-EyeL_Normal.png
+newmtl Mos-easy-EyeR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-EyeR_Albedo.png
+map_bump mosuito easy_Mos-easy-EyeR_Normal.png
+newmtl Mos-easy-AntenaL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-AntenaL_Albedo.png
+map_bump mosuito easy_Mos-easy-AntenaL_Normal.png
+newmtl Mos-easy-antenaR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-antenaR_Albedo.png
+map_bump mosuito easy_Mos-easy-antenaR_Normal.png
+newmtl Mos-easy-body
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-body_Albedo.png
+map_bump mosuito easy_Mos-easy-body_Normal.png
+newmtl Mos-easy-Head
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-Head_Albedo.png
+map_bump mosuito easy_Mos-easy-Head_Normal.png
+newmtl Mos-easy-LegsBL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-LegsBL_Albedo.png
+map_bump mosuito easy_Mos-easy-LegsBL_Normal.png
+newmtl Mos-easy-LegsBR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-LegsBR_Albedo.png
+map_bump mosuito easy_Mos-easy-LegsBR_Normal.png
+newmtl Mos-easy-LegsFL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-LegsFL_Albedo.png
+map_bump mosuito easy_Mos-easy-LegsFL_Normal.png
+newmtl Mos-easy-LegsFR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-LegsFR_Albedo.png
+map_bump mosuito easy_Mos-easy-LegsFR_Normal.png
+newmtl Mos-easy-Mouth
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-Mouth_Albedo.png
+map_bump mosuito easy_Mos-easy-Mouth_Normal.png
+newmtl Mos-easy-Thorax
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos-easy-Thorax_Albedo.png
+map_bump mosuito easy_Mos-easy-Thorax_Normal.png
+newmtl Mos_Easy_WingL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos_Easy_WingL_Albedo.png
+map_bump mosuito easy_Mos_Easy_WingL_Normal.png
+newmtl Mos_Easy_WingR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd mosuito easy_Mos_Easy_WingR_Albedo.png
+map_bump mosuito easy_Mos_Easy_WingR_Normal.png

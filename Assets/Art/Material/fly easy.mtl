@@ -1,0 +1,70 @@
+newmtl Fly-Easy-Body
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-Body_Albedo.png
+map_bump fly easy_Fly-Easy-Body_Normal.png
+newmtl Fly-Easy-EyeL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-EyeL_Albedo.png
+map_bump fly easy_Fly-Easy-EyeL_Normal.png
+newmtl Fly-Easy-EyeR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-EyeR_Albedo.png
+map_bump fly easy_Fly-Easy-EyeR_Normal.png
+newmtl Fly-Easy-MandableL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-MandableL_Albedo.png
+map_bump fly easy_Fly-Easy-MandableL_Normal.png
+newmtl Fly-Easy-MandableR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-MandableR_Albedo.png
+map_bump fly easy_Fly-Easy-MandableR_Normal.png
+newmtl Fly-Easy-WingL
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-WingL_Albedo.png
+map_bump fly easy_Fly-Easy-WingL_Normal.png
+newmtl Fly-Easy-WingR
+Ns 100.000
+d 1.00000
+illum 2
+Kd 1.00000 1.00000 1.00000
+Ka 0.00000 0.00000 0.00000
+Ks 1.00000 1.00000 1.00000
+Ke 0.00000e+0 0.00000e+0 0.00000e+0
+map_Kd fly easy_Fly-Easy-WingR_Albedo.png
+map_bump fly easy_Fly-Easy-WingR_Normal.png
