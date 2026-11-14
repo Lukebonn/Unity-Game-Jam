@@ -1,9 +1,6 @@
 using UnityEngine;
 
-// What a lucky roll does. None means the roll wasn't lucky.
-public enum LuckyEffect { None, KillAll, TimesTen, Instakill }
-
-// The player's lucky number, picked on the main menu.
+// The player's lucky number, picked on the main menu. Rolling it gives a star (see LuckyEffects).
 // PlayerPrefs saves it on the player's PC, so it's remembered next launch.
 public static class LuckyNumber
 {

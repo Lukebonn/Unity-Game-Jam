@@ -28,6 +28,7 @@ public class PauseMenu : MonoBehaviour
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
         if (player != null && player.isDead) return;   // the game-over screen has its own buttons
+        if (WinUI.HasWon) return;                      // so does the win screen
 
         // Back out of Controls or Credits first
         foreach (GameObject subPanel in subPanels)

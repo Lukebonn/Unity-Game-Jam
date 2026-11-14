@@ -29,9 +29,19 @@ public abstract class EnemyBase : MonoBehaviour
 	public bool IsDead => isDead;
 	public float HealthFraction => (float)currentHealth / Mathf.Max(1, maxHealth);
 
+	// Flying enemies (the mosquitoes) go straight over holes and never fall.
+	// Walkers (the flies) follow the NavMesh around holes and over bridges.
+	public virtual bool Flies => false;
+
+	// This enemy's picture for the wave intro: Resources/EnemyIcons/<prefab name>
+	public static Sprite IconFor(EnemyBase prefab) =>
+		prefab != null ? Resources.Load<Sprite>("EnemyIcons/" + prefab.name) : null;
+
 	protected int currentHealth;
 	protected PlayerHealth player;
 	protected bool isDead = false;
+
+	private float flyHeight = 1f;
 
 	protected virtual void OnEnable() => All.Add(this);
 	protected virtual void OnDisable() => All.Remove(this);
@@ -40,6 +50,14 @@ public abstract class EnemyBase : MonoBehaviour
 	{
 		currentHealth = Mathf.Max(1, maxHealth);
 
+		// SeaGamez's textures, matched to the parts by name (see EnemySkins)
+		EnemySkins.Apply(gameObject);
+
+		// A trigger box lined up with the camera, so shots that look like hits are hits (see CameraHitbox)
+		GameObject hitbox = new GameObject("Hitbox", typeof(BoxCollider), typeof(Rigidbody), typeof(CameraHitbox));
+		hitbox.transform.SetParent(transform, false);
+		hitbox.GetComponent<Rigidbody>().isKinematic = true;
+
 		// Every part of the enemy goes on the Enemy layer, so the renderer can outline it through pillars
 		int enemyLayer = LayerMask.NameToLayer("Enemy");
 		if (enemyLayer >= 0)
@@ -47,6 +65,11 @@ public abstract class EnemyBase : MonoBehaviour
 			foreach (Transform part in GetComponentsInChildren<Transform>(true))
 				part.gameObject.layer = enemyLayer;
 		}
+
+		// Flyers hold the height they'd have standing on the floor
+		CharacterController controller = GetComponent<CharacterController>();
+		if (controller != null)
+			flyHeight = controller.height / 2f - controller.center.y;
 	}
 
 	protected virtual void Start()
@@ -76,8 +99,6 @@ public abstract class EnemyBase : MonoBehaviour
 
 		currentHealth = Mathf.Max(0, currentHealth - damage);
 
-		Debug.Log($"{gameObject.name} HP: {currentHealth}");
-
 		if (currentHealth <= 0)
 		{
 			Die();
@@ -89,8 +110,6 @@ public abstract class EnemyBase : MonoBehaviour
 		if (isDead) return;
 
 		isDead = true;
-
-		Debug.Log($"{gameObject.name} died!");
 
 		// OPTIONAL: Spawn a physical die when killed.
 		if (dicePrefab != null)
@@ -108,6 +127,34 @@ public abstract class EnemyBase : MonoBehaviour
 		SignalBus.InvokeEnemyDeath(transform.position);
 
 		Destroy(gameObject);
+	}
+
+	// ---- Moving ----
+	// One frame of movement at this velocity: walkers fall with gravity, flyers hold their height
+	protected void Travel(CharacterController controller, Vector3 velocity)
+	{
+		if (Flies)
+		{
+			Vector3 step = velocity * Time.deltaTime;
+			step.y = flyHeight - transform.position.y;
+			controller.Move(step);
+		}
+		else
+		{
+			controller.SimpleMove(velocity);
+		}
+	}
+
+	// Which way to go to reach a target: flyers go straight unless a pillar is in the way
+	protected Vector3 SteerTo(Vector3 target)
+	{
+		if (Flies && !PillarBlocks(target))
+		{
+			Vector3 direction = target - transform.position;
+			direction.y = 0f;
+			return direction.sqrMagnitude > 0.0001f ? direction.normalized : Vector3.zero;
+		}
+		return PathDirectionTo(target);
 	}
 
 	// ---- Pathfinding around pillars ----

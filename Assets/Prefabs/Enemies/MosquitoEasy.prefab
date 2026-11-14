@@ -167,12 +167,12 @@ MonoBehaviour:
   diceSpawnOffset: {x: 0, y: 1, z: 0}
   healthBarHeight: 1.93
   moveSpeed: 5.5
-  dashTriggerRange: 7
+  dashTriggerRange: 14
   comfortableDistance: 4
   dashDamage: 12
   windupSeconds: 0.45
   dashSpeed: 20
-  maxDashDistance: 10
+  maxDashDistance: 20
   hitRadius: 1.1
   recoverySeconds: 0.55
   dashCooldown: 2.2

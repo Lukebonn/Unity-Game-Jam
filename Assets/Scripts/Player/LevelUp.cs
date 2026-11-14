@@ -9,6 +9,10 @@ public class LevelUp : MonoBehaviour
 
     public int Level { get; private set; } = 1;
 
+    // How many dice have gone into each stat (1 = Health ... 6 = Armor), for the left panel's diamonds
+    public int StatLevel(int stat) => statLevels[stat - 1];
+
+    private readonly int[] statLevels = new int[6];
     private int shownPending = -1;
 
     private void Start()
@@ -53,14 +57,11 @@ public class LevelUp : MonoBehaviour
         while (diceTray.TrySpendDie(out int rolled))
         {
             ApplyStat(stat, rolled);
+            statLevels[stat - 1]++;
             spent++;
         }
 
-        if (spent == 0)
-        {
-            Debug.Log("No landed dice to spend");
-            return;
-        }
+        if (spent == 0) return;   // no landed dice to spend
 
         Level += spent;   // +1 level per die
         levelValue.text = Level.ToString();
@@ -69,7 +70,6 @@ public class LevelUp : MonoBehaviour
     // Same order as StatList.Names: 1 Health, 2 Stamina, 3 Speed, 4 Fire rate, 5 Damage, 6 Armor
     private void ApplyStat(int stat, int rolled)
     {
-        Debug.Log($"Applying a die that rolled {rolled} to stat {stat}");
         switch (stat)
         {
             case 1: SignalBus.InvokeLvlHealth(rolled); break;

@@ -5,7 +5,7 @@ public class StaminaHUD : MonoBehaviour
     [SerializeField] private RectTransform StaminaBar;   // the green fill (child)
     [SerializeField] private PlayerStamina PlayerStamina;
     [SerializeField] private float Width = 200f;
-    [SerializeField] private float Height = 12f;
+    [SerializeField] private float Height = 72f;
     [SerializeField] private float MaxWidth = 600f;
 
     private RectTransform background;

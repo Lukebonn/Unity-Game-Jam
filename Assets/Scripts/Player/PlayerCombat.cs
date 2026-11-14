@@ -12,24 +12,16 @@ public class PlayerCombat : MonoBehaviour
 	[SerializeField] private InputActionAsset inputActions;
 
 	[Header("Movement")]
-	public float moveSpeed = 6f;                // walk speed
+	public float moveSpeed = 6f;                // top walking speed
 	public float moveSpeedPerPoint = 0.15f;     // walk speed added per rolled point (d6)
-	public float sprintCostPerSecond = 25f;     // stamina used per second of sprinting
-	private const float SprintMultiplier = 2f;  // GDD: sprint is always double walk
-
-	[Header("Dash (Space, the Jump action)")]
-	public float dashDistance = 24f;            // jumps the holes in the floor; grows with the speed stat
-	public float dashDuration = 0.4f;
-	public float dashStaminaCost = 30f;         // GDD: a jump takes a chunk of stamina
-	public float dashCooldown = 0.35f;
-	public UnityEvent OnDash;                   // wired to the dash sound in the Inspector
-
-	[Header("Holes in the floor")]
-	public int fallDamage = 10;                 // HP lost for falling into a hole
+	public float accelerationTime = 1f;         // seconds from standing still to top speed
+	public float sprintCostPerSecond = 100f;    // a full starting stamina bar is 1 second of sprint
+	private const float SprintMultiplier = 4f;  // sprint is 4x walk
+	public float gravity = -30f;                // about 3x real gravity, so you drop into a hole fast
 
 	[Header("Shooting")]
-	public float bulletsPerSecond = 6f;
-	public float bulletsPerSecondPerPoint = 0.25f;
+	public float bulletsPerSecond = 1.2f;
+	public float fireRatePercentPerPoint = 3f;  // each rolled point: 3% faster than it is now (a die is about 10%)
 	public int damagePerBullet = 10;
 	public float damagePerPoint = 1f;
 	public float bulletRange = 35f;
@@ -39,47 +31,45 @@ public class PlayerCombat : MonoBehaviour
 	// For the speedometer
 	public float CurrentSpeed { get; private set; }
 	public bool IsSprinting { get; private set; }
-	public bool IsDashing { get; private set; }
-
-	// Lucky effect: every bullet kills while this is true
-	public bool IsInstakill => Time.time < instakillUntil;
 
 	private CharacterController controller;
 	private Camera cam;
 	private LineRenderer bulletLine;
 	private PlayerStamina stamina;
+	private PlayerStar star;
 
 	private InputActionMap playerMap;
 	private InputAction moveAction;
 	private InputAction pointAction;
 	private InputAction fireAction;
 	private InputAction sprintAction;
-	private InputAction dashAction;
 
-	private Vector3 lastMoveDirection;
-	private Vector3 dashDirection;
-	private float dashEndTime;
-	private float nextDashTime;
-	private float startingMoveSpeed;
+	private Vector3 velocity;                   // sideways speed, built up and bled off gradually
+	private float verticalVelocity;
 	private Vector3 lastSafePosition;           // the last spot with floor under us, to climb back out of a hole
 	private int groundMask;
 
 	private float nextFireTime;
-	private float instakillUntil;
 	private Coroutine bulletEffect;
 
 	private void Awake()
 	{
 		controller = GetComponent<CharacterController>();
+		// Speed builds up gradually, so the first frames' moves are tiny: don't let the
+		// controller throw away moves under 1 mm (its default) at high frame rates
+		controller.minMoveDistance = 0f;
 		cam = Camera.main;
 		bulletLine = GetComponent<LineRenderer>();
 
-		// Sprint needs stamina. Add it if this player doesn't have one yet (e.g. in a new level scene).
+		// Sprint needs stamina, and the lucky star needs its own script. Add them if this player
+		// doesn't have them yet (e.g. in a new level scene).
 		stamina = GetComponent<PlayerStamina>();
 		if (stamina == null)
 			stamina = gameObject.AddComponent<PlayerStamina>();
+		star = GetComponent<PlayerStar>();
+		if (star == null)
+			star = gameObject.AddComponent<PlayerStar>();
 
-		startingMoveSpeed = moveSpeed;
 		lastSafePosition = transform.position;
 		groundMask = ~LayerMask.GetMask("Player", "Enemy");   // anything solid but us and enemies is floor
 
@@ -113,7 +103,6 @@ public class PlayerCombat : MonoBehaviour
 		pointAction = playerMap.FindAction("Point");
 		fireAction = playerMap.FindAction("Fire");
 		sprintAction = playerMap.FindAction("Sprint");
-		dashAction = playerMap.FindAction("Jump");   // Space: dash (optional, so not in the check below)
 
 		if (moveAction == null ||
 			pointAction == null ||
@@ -146,8 +135,6 @@ public class PlayerCombat : MonoBehaviour
 
 		if (bulletLine != null)
 			bulletLine.enabled = false;
-
-		IsDashing = false;   // e.g. dying mid-dash
 	}
 
 	private void Update()
@@ -155,16 +142,7 @@ public class PlayerCombat : MonoBehaviour
 		if (cam == null || PauseMenu.IsPaused)
 			return;
 
-		if (IsDashing)
-		{
-			UpdateDash();
-		}
-		else
-		{
-			HandleMovement();
-			if (dashAction != null && dashAction.WasPressedThisFrame())
-				TryDash(lastMoveDirection);
-		}
+		HandleMovement();
 
 		// Safety net: fell off the world somewhere a hole's trigger didn't catch
 		if (transform.position.y < -20f)
@@ -198,25 +176,39 @@ public class PlayerCombat : MonoBehaviour
 		forward.Normalize();
 		right.Normalize();
 
-		Vector3 movement =
-			forward * input.y +
-			right * input.x;
-		lastMoveDirection = movement;
+		Vector3 wish = forward * input.y + right * input.x;
+		if (wish.sqrMagnitude > 1f) wish.Normalize();
 
 		// Sprint while Sprint (Left Shift) is held and we're moving. Shooting doesn't slow you.
-		bool wantsToSprint = sprintAction.IsPressed() && movement.sqrMagnitude > 0.01f;
-		IsSprinting = wantsToSprint && stamina.TryUse(sprintCostPerSecond * Time.deltaTime);
+		// A lucky star makes it cost half as much.
+		bool wantsToSprint = sprintAction.IsPressed() && wish.sqrMagnitude > 0.01f;
+		IsSprinting = wantsToSprint && stamina.TryUse(sprintCostPerSecond * Time.deltaTime / star.Multiplier);
 
-		float speed = IsSprinting ? moveSpeed * SprintMultiplier : moveSpeed;
+		float topSpeed = moveSpeed * (IsSprinting ? SprintMultiplier : 1f) * star.Multiplier;
 
-		controller.SimpleMove(
-			movement.normalized * speed
-		);
+		// Speed builds up over about a second, and turning bleeds it off: the velocity is steered
+		// toward where you want to go at a limited rate, so a sharp turn has to slow down first.
+		Vector3 target = wish * topSpeed;
+		float rate = topSpeed / Mathf.Max(0.05f, accelerationTime);
+		// Slowing down (letting go, or after a sprint) is quicker than speeding up, so you don't slide
+		if (target.sqrMagnitude < velocity.sqrMagnitude)
+			rate = Mathf.Max(rate, velocity.magnitude * 2f / Mathf.Max(0.05f, accelerationTime));
+		velocity = Vector3.MoveTowards(velocity, target, rate * Time.deltaTime);
 
-		// How fast we actually moved (after hitting walls), without gravity
-		Vector3 velocity = controller.velocity;
-		velocity.y = 0f;
-		CurrentSpeed = velocity.magnitude;
+		// Gravity: pressed to the floor normally, dropping fast over a hole
+		if (controller.isGrounded && verticalVelocity < 0f)
+			verticalVelocity = -2f;
+		verticalVelocity += gravity * Time.deltaTime;
+
+		CollisionFlags hits = controller.Move((velocity + Vector3.up * verticalVelocity) * Time.deltaTime);
+
+		// How fast we actually moved, without the falling part.
+		// Running into a wall takes away the speed going into it.
+		Vector3 moved = controller.velocity;
+		moved.y = 0f;
+		if ((hits & CollisionFlags.Sides) != 0)
+			velocity = moved;
+		CurrentSpeed = moved.magnitude;
 
 		// Remember where we last stood on solid floor
 		if (controller.isGrounded && !OverHole())
@@ -257,7 +249,7 @@ public class PlayerCombat : MonoBehaviour
 			return;
 
 		nextFireTime = Time.time +
-			1f / Mathf.Max(0.1f, bulletsPerSecond);
+			1f / Mathf.Max(0.1f, bulletsPerSecond * star.Multiplier);
 
 		Shoot(direction);
 	}
@@ -275,7 +267,8 @@ public class PlayerCombat : MonoBehaviour
 		Vector3 bulletEnd =
 			bulletOrigin + direction * bulletRange;
 
-		// Check if our bullet hits anything
+		// Check if our bullet hits anything. Enemy hitboxes are triggers (see CameraHitbox);
+		// enemy bullets sit on the Ignore Raycast layer, so they never block ours.
 		if (Physics.Raycast(
 			bulletOrigin,
 			direction,
@@ -290,7 +283,7 @@ public class PlayerCombat : MonoBehaviour
 
 			if (enemy != null)
 			{
-				enemy.TakeDamage(IsInstakill ? enemy.maxHealth : damagePerBullet);
+				enemy.TakeDamage(Mathf.RoundToInt(damagePerBullet * star.Multiplier));
 			}
 		}
 
@@ -328,48 +321,12 @@ public class PlayerCombat : MonoBehaviour
 
 	private void HandleRPMLvlUp(int roll)
 	{
-		bulletsPerSecond += roll * bulletsPerSecondPerPoint;
+		bulletsPerSecond *= 1f + roll * fireRatePercentPerPoint / 100f;
 	}
 
 	private void HandleDamageLvlUp(int roll)
 	{
 		damagePerBullet += Mathf.RoundToInt(roll * damagePerPoint);
-	}
-
-	public void StartInstakill(float seconds)
-	{
-		instakillUntil = Time.time + seconds;
-	}
-
-	// Dash: a quick burst in the direction you're moving (or facing) that carries you over holes.
-	public bool TryDash(Vector3 direction)
-	{
-		if (IsDashing || Time.time < nextDashTime) return false;
-		direction.y = 0f;
-		if (direction.sqrMagnitude < 0.01f) direction = transform.forward;
-		if (!stamina.TrySpend(dashStaminaCost)) return false;
-
-		dashDirection = direction.normalized;
-		dashEndTime = Time.time + dashDuration;
-		IsDashing = true;
-		OnDash?.Invoke();
-		return true;
-	}
-
-	private void UpdateDash()
-	{
-		// GDD: the speed stat also makes the jump go further
-		float speed = dashDistance * (moveSpeed / startingMoveSpeed) / dashDuration;
-		controller.Move(dashDirection * speed * Time.deltaTime);   // no gravity, so it flies over holes
-		CurrentSpeed = speed;
-
-		if (Time.time < dashEndTime) return;
-
-		// Still over a hole? Keep going until there's floor under us instead of dropping in
-		if (OverHole() && Time.time < dashEndTime + 0.3f) return;
-
-		IsDashing = false;
-		nextDashTime = Time.time + dashCooldown;
 	}
 
 	// True when there's no floor right under the middle of the player
@@ -380,16 +337,17 @@ public class PlayerCombat : MonoBehaviour
 			groundMask, QueryTriggerInteraction.Ignore);
 	}
 
-	// A Trench calls this when the player falls in: back to the last safe spot, minus some HP
+	// A Trench calls this when the player falls in: back to the last safe spot, with half the health
 	public void ClimbOutOfHole()
 	{
 		controller.enabled = false;   // a CharacterController ignores teleports while it's on
 		transform.position = lastSafePosition;
 		controller.enabled = true;
-		IsDashing = false;
+		velocity = Vector3.zero;
+		verticalVelocity = 0f;
 
 		PlayerHealth health = GetComponent<PlayerHealth>();
 		if (health != null)
-			health.TakeDamage(fallDamage);
+			health.LoseHalfHealth();
 	}
 }

@@ -20,11 +20,16 @@ public abstract class EnemyRangedAI : EnemyBase
     public int bulletsPerBurst = 3;
     public float burstInterval = 0.17f;
     public float spreadDegrees = 7f;
+    [Tooltip("Bullets (and their red lanes on the ground) go no further than this")]
+    public float shotReach = 30f;
 
     [Header("Optional References")]
     public Transform muzzle;
     public GameObject projectilePrefab;
     public Animator animator;
+
+    // Shooters are mosquitoes: they fly over holes
+    public override bool Flies => true;
 
     private CharacterController controller;
     private EnemyTelegraphVFX warningVFX;
@@ -60,12 +65,12 @@ public abstract class EnemyRangedAI : EnemyBase
         Vector3 movement = Vector3.zero;
         if (!firing)
         {
-            // Too far away, or a pillar in the way: follow the NavMesh path closer
-            if (distance > idealRange || blocked) movement = PathDirectionTo(player.transform.position);
+            // Too far away, or a pillar in the way: fly closer (around the pillar)
+            if (distance > idealRange || blocked) movement = SteerTo(player.transform.position);
             else if (distance < minRange) movement = -direction;
             else movement = Vector3.Cross(Vector3.up, direction) * strafeDirection * strafeWeight;
         }
-        controller.SimpleMove(movement * moveSpeed);
+        Travel(controller, movement * moveSpeed);
 
         // Only shoot along a clear line, so shots aren't wasted on pillars
         if (distance <= maxRange && distance >= minRange * 0.65f &&
@@ -108,20 +113,37 @@ public abstract class EnemyRangedAI : EnemyBase
         if (aim.sqrMagnitude < 0.001f) return;
         aim = Quaternion.Euler(0f, Random.Range(-spreadDegrees, spreadDegrees), 0f) * aim.normalized;
 
-        GameObject bullet;
-        if (projectilePrefab != null)
-            bullet = Instantiate(projectilePrefab, origin, Quaternion.LookRotation(aim));
-        else
-        {
-            // No prefab is required to test the game jam build.
-            bullet = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            bullet.name = "Enemy Bullet (fallback)";
-            bullet.transform.position = origin;
-            bullet.transform.localScale = Vector3.one * 0.25f;
-        }
+        GameObject bullet = projectilePrefab != null
+            ? Instantiate(projectilePrefab, origin, Quaternion.LookRotation(aim))
+            : MakeBullet(origin);
+
+        // The bullet's path, up to the first pillar it would hit: shown on the ground as a red lane.
+        // The bullet takes the time it needs to fly down the lane; be in the red when it passes and it hits you.
+        float reach = shotReach;
+        int solid = ~LayerMask.GetMask("Enemy", "Player", "Ignore Raycast");
+        if (Physics.Raycast(origin, aim, out RaycastHit hit, reach, solid, QueryTriggerInteraction.Ignore))
+            reach = hit.distance;
+        GroundTelegraph lane = GroundTelegraph.Create();
+        if (lane != null) lane.ShowStrip(bullet, origin, aim, reach, 0.9f);
 
         EnemyProjectile projectile = bullet.GetComponent<EnemyProjectile>();
         if (projectile == null) projectile = bullet.AddComponent<EnemyProjectile>();
-        projectile.Initialize(aim, projectileSpeed, damagePerProjectile);
+        projectile.Initialize(aim, projectileSpeed, damagePerProjectile, lane, reach);
+    }
+
+    // No prefab is required to test the game jam build: a glowing ball that hits anything within
+    // half the red lane's width of its path
+    private static GameObject MakeBullet(Vector3 origin)
+    {
+        GameObject bullet = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        bullet.name = "Enemy Bullet";
+        bullet.layer = LayerMask.NameToLayer("Ignore Raycast");   // the player's shots pass through it
+        bullet.transform.position = origin;
+        bullet.transform.localScale = Vector3.one * 0.4f;
+        bullet.GetComponent<SphereCollider>().radius = 0.45f / 0.4f;   // 0.45 m: matches the lane
+        Material glow = Resources.Load<Material>("EnemyBullet");
+        if (glow != null) bullet.GetComponent<MeshRenderer>().sharedMaterial = glow;
+        bullet.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        return bullet;
     }
 }

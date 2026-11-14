@@ -4,7 +4,7 @@ using System;
 public class SignalBus : MonoBehaviour
 {
     // Dice and the run
-    public static event Action<int, LuckyEffect> OnDieLanded;   // a die finished rolling: its number, and its lucky effect
+    public static event Action<int, bool> OnDieLanded;          // a die finished rolling: its number, and whether it was your lucky number
     public static event Action OnPlayerDied;
     public static event Action<Vector3> OnEnemyDeath;            // raised by Cash's EnemyBase, with where the enemy died
 
@@ -16,7 +16,7 @@ public class SignalBus : MonoBehaviour
     public static event Action<int> OnLvlDamage;
     public static event Action<int> OnLvlArmor;
 
-    public static void InvokeDieLanded(int value, LuckyEffect effect) => OnDieLanded?.Invoke(value, effect);
+    public static void InvokeDieLanded(int value, bool lucky) => OnDieLanded?.Invoke(value, lucky);
     public static void InvokePlayerDied() => OnPlayerDied?.Invoke();
     public static void InvokeEnemyDeath(Vector3 where) => OnEnemyDeath?.Invoke(where);
 

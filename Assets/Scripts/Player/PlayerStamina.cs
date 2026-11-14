@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class PlayerStamina : MonoBehaviour
 {
-    public float maxStamina = 100f;
-    public int levelUpIncrementPrct = 5;   // same rule as health: +5% of starting max per point
-    public float regenPerSecond = 30f;
+    public float maxStamina = 100f;        // PlayerCombat sprints at 100 a second, so this starts as 1 second
+    public int levelUpIncrementPrct = 25;  // +25% of the starting max per rolled point: ~10 s of sprint after 10 dice
+    [Range(0f, 1f)] public float regenFractionPerSecond = 0.25f;   // refills a quarter of the bar each second
     public float regenDelay = 0.75f;       // seconds after the last use before it refills
     [Range(0f, 1f)] public float recoverAt = 0.25f;   // after running dry, sprint again at 25%
 
@@ -34,7 +34,8 @@ public class PlayerStamina : MonoBehaviour
     {
         if (Time.time - lastUsedTime < regenDelay) return;
 
-        CurrentStamina = Mathf.Min(maxStamina, CurrentStamina + regenPerSecond * Time.deltaTime);
+        // A bigger bar refills just as quickly, so upgrades never make you wait longer
+        CurrentStamina = Mathf.Min(maxStamina, CurrentStamina + maxStamina * regenFractionPerSecond * Time.deltaTime);
 
         if (exhausted && CurrentStamina >= maxStamina * recoverAt)
         {
@@ -58,28 +59,10 @@ public class PlayerStamina : MonoBehaviour
         return true;
     }
 
-    // Spends a fixed chunk (a dash) only if there's enough. Returns false if not.
-    public bool TrySpend(float amount)
-    {
-        if (exhausted || CurrentStamina < amount) return false;
-
-        CurrentStamina -= amount;
-        lastUsedTime = Time.time;
-
-        if (CurrentStamina <= 0f)
-        {
-            CurrentStamina = 0f;
-            exhausted = true;
-        }
-        return true;
-    }
-
     private void HandleStaminaLvlUp(int roll)
     {
         float gained = StartingMaxStamina * (levelUpIncrementPrct / 100f) * roll;
         maxStamina += gained;
         CurrentStamina += gained;
-
-        Debug.Log($"Stamina +{gained}: {CurrentStamina}/{maxStamina}");
     }
 }

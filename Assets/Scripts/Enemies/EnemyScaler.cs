@@ -7,6 +7,10 @@ using UnityEngine;
 /// </summary>
 public class EnemyScaler : MonoBehaviour
 {
+	[Header("Every Enemy, From Wave 1")]
+	[Min(0.1f)] public float baseSpeedMultiplier = 1.4f;    // 40% faster than the speed set on the prefab
+	[Min(0.1f)] public float baseDamageMultiplier = 1.5f;   // hits 50% harder than the prefab's damage
+
 	[Header("Growth per Wave (percentage points)")]
 	[Range(0, 40)] public int healthPercentPerWave = 8;
 	[Range(0, 40)] public int damagePercentPerWave = 5;
@@ -24,9 +28,9 @@ public class EnemyScaler : MonoBehaviour
 
 		float healthFactor = Mathf.Min(maximumHealthMultiplier,
 			1f + wavesPassed * healthPercentPerWave / 100f);
-		float damageFactor = Mathf.Min(maximumDamageMultiplier,
+		float damageFactor = baseDamageMultiplier * Mathf.Min(maximumDamageMultiplier,
 			1f + wavesPassed * damagePercentPerWave / 100f);
-		float speedFactor = Mathf.Min(maximumSpeedMultiplier,
+		float speedFactor = baseSpeedMultiplier * Mathf.Min(maximumSpeedMultiplier,
 			1f + wavesPassed * speedPercentPerWave / 100f);
 
 		// EnemyBase.SetMaxHealth also fills current health to the new maximum.

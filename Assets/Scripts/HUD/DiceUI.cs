@@ -11,10 +11,10 @@ public class DiceUI : MonoBehaviour
     [SerializeField] private float rollTime = 2f;
     [SerializeField] private Color luckyColor = new Color(1f, 0.8f, 0.2f);
 
-    // What the die is worth when you spend it (10x its number on a lucky TimesTen)
+    // What the die is worth when you spend it
     public int Value { get; private set; }
     public bool HasLanded => Value > 0;
-    public LuckyEffect Effect { get; private set; }
+    public bool IsLucky { get; private set; }
 
     public void Roll()
     {
@@ -32,15 +32,13 @@ public class DiceUI : MonoBehaviour
         int rolled = Random.Range(1, LuckyNumber.Max + 1);   // 1 to 6
         image.sprite = faces[rolled - 1];
 
-        if (rolled == LuckyNumber.Value)
-        {
-            Effect = (LuckyEffect)Random.Range(1, 4);   // KillAll, TimesTen or Instakill
+        IsLucky = rolled == LuckyNumber.Value;
+        if (IsLucky)
             image.color = luckyColor;
-        }
 
-        Value = Effect == LuckyEffect.TimesTen ? rolled * 10 : rolled;
+        Value = rolled;
 
-        // The lucky effects listen for this
-        SignalBus.InvokeDieLanded(rolled, Effect);
+        // LuckyEffects listens for this and starts the star on a lucky roll
+        SignalBus.InvokeDieLanded(rolled, IsLucky);
     }
 }

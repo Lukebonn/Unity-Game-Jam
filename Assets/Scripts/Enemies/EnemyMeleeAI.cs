@@ -18,6 +18,8 @@ public abstract class EnemyMeleeAI : EnemyBase
     public float attackRange = 1.7f;
     [Range(0f, 360f)] public float hitArcDegrees = 180f;
     public float windupSeconds = 0.4f;
+    [Tooltip("The red warning on the ground needs a moment to be seen, so no windup is shorter than this.")]
+    public float minimumWindup = 0.45f;
     public float recoverySeconds = 0.35f;
     public float attackCooldown = 0.8f;
     [Tooltip("HeavyFlip only: distance traveled during the flip.")]
@@ -58,18 +60,18 @@ public abstract class EnemyMeleeAI : EnemyBase
 
         if (attacking)
         {
-            controller.SimpleMove(Vector3.zero);
+            Travel(controller, Vector3.zero);
             return;
         }
 
-        // Follow the NavMesh path so pillars get walked around, and face the way we're walking
-        Vector3 move = distance > stopDistance ? PathDirectionTo(player.transform.position) : Vector3.zero;
+        // Follow the NavMesh path so pillars and holes get walked around, and face the way we're walking
+        Vector3 move = distance > stopDistance ? SteerTo(player.transform.position) : Vector3.zero;
         Vector3 face = move.sqrMagnitude > 0.01f ? move : direction;
         if (face.sqrMagnitude > 0.0025f)
             transform.rotation = Quaternion.Slerp(transform.rotation,
                 Quaternion.LookRotation(face), Time.deltaTime * rotationSpeed);
 
-        controller.SimpleMove(move * moveSpeed);
+        Travel(controller, move * moveSpeed);
         if (distance <= attackRange && Time.time >= nextAttackTime)
         {
             nextAttackTime = Time.time + Mathf.Max(0.1f, attackCooldown);
@@ -85,11 +87,42 @@ public abstract class EnemyMeleeAI : EnemyBase
 
         // Capture target position at the START of the windup so a heavy attack can be dodged.
         Vector3 targetAtWindup = player != null ? player.transform.position : transform.position;
-        yield return new WaitForSeconds(Mathf.Max(0f, windupSeconds));
+        Vector3 toTarget = targetAtWindup - transform.position;
+        toTarget.y = 0f;
+        if (toTarget.sqrMagnitude > 0.01f)
+            transform.rotation = Quaternion.LookRotation(toTarget);
+
+        // Mark the ground where the hit will land: everything in the red when it lands gets hit
+        GroundTelegraph zone = GroundTelegraph.Create();
+        GroundTelegraph lane = null;
+        Vector3 leapDirection = transform.forward;
+        float travelDistance = 0f;
+        if (attackStyle == AttackStyle.HeavyFlip)
+        {
+            leapDirection = toTarget.sqrMagnitude < 0.01f ? transform.forward : toTarget.normalized;
+            travelDistance = Mathf.Min(leapDistance, Mathf.Max(0f, toTarget.magnitude - 0.7f));
+            lane = GroundTelegraph.Create();
+            if (lane != null) lane.ShowStrip(this, transform.position, leapDirection, travelDistance, 2f);
+            if (zone != null) zone.ShowArc(this, transform.position + leapDirection * travelDistance, leapDirection, attackRange, hitArcDegrees);
+        }
+        else if (zone != null)
+        {
+            zone.ShowArc(this, transform.position, transform.forward, attackRange, hitArcDegrees);
+        }
+
+        // The charge: the red fills up until the hit lands
+        float windup = Mathf.Max(windupSeconds, minimumWindup);
+        for (float t = 0f; t < windup; t += Time.deltaTime)
+        {
+            if (zone != null) zone.SetFill(t / windup);
+            if (lane != null) lane.SetFill(t / windup);
+            yield return null;
+        }
 
         if (isDead || player == null || player.isDead)
         {
             if (warningVFX != null) warningVFX.SetWarning(false);
+            Clear(zone, lane);
             attacking = false;
             yield break;
         }
@@ -98,16 +131,10 @@ public abstract class EnemyMeleeAI : EnemyBase
         if (animator != null) animator.SetTrigger("Attack");
         if (attackStyle == AttackStyle.HeavyFlip)
         {
-            Vector3 leapDirection = targetAtWindup - transform.position;
-            leapDirection.y = 0f;
-            leapDirection = leapDirection.sqrMagnitude < 0.01f ? transform.forward : leapDirection.normalized;
             transform.rotation = Quaternion.LookRotation(leapDirection);
 
             Quaternion originalRotation = visualRoot != null ? visualRoot.localRotation : Quaternion.identity;
             float duration = Mathf.Max(0.05f, leapDuration);
-            float travelDistance = Mathf.Min(leapDistance, Mathf.Max(0f, Vector3.Distance(
-                new Vector3(transform.position.x, 0f, transform.position.z),
-                new Vector3(targetAtWindup.x, 0f, targetAtWindup.z)) - 0.7f));
             float elapsed = 0f;
             leaping = true;
             while (elapsed < duration && !isDead)
@@ -125,8 +152,15 @@ public abstract class EnemyMeleeAI : EnemyBase
         }
 
         DealMeleeDamage();
+        Clear(zone, lane);
         yield return new WaitForSeconds(Mathf.Max(0f, recoverySeconds));
         attacking = false;
+    }
+
+    private static void Clear(GroundTelegraph zone, GroundTelegraph lane)
+    {
+        if (zone != null) Destroy(zone.gameObject);
+        if (lane != null) Destroy(lane.gameObject);
     }
 
     private void DealMeleeDamage()

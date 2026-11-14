@@ -72,7 +72,7 @@ public class WorldDie : MonoBehaviour
         landedTime = Time.time;
         model.localPosition = Vector3.up * hoverHeight;
         number.text = source.Value.ToString();
-        number.color = source.Effect != LuckyEffect.None ? luckyColor : numberColor;
+        number.color = source.IsLucky ? luckyColor : numberColor;
         number.gameObject.SetActive(true);
     }
 

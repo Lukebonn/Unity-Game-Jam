@@ -1,40 +1,25 @@
 using UnityEngine;
 
-// Carries out the lucky effects that happen in the world.
-// (TimesTen is about the die itself, so DiceUI handles it.)
+// Rolling your lucky number gives the player a star: every stat doubled for a few seconds,
+// disco glow included (see PlayerStar). Goes on the GameManager.
 public class LuckyEffects : MonoBehaviour
 {
-    [SerializeField] private PlayerCombat player;
-    [SerializeField] private float instakillSeconds = 10f;
+    [SerializeField] private PlayerStar star;
+    [SerializeField] private float starSeconds = 10f;
 
     private void OnEnable() => SignalBus.OnDieLanded += HandleDieLanded;
     private void OnDisable() => SignalBus.OnDieLanded -= HandleDieLanded;
 
     private void Start()
     {
-        // Works in any level scene: find the player if nobody dragged one in
-        if (player == null) player = FindFirstObjectByType<PlayerCombat>();
+        // Works in any level scene: find the player's star if nobody dragged one in
+        // (PlayerCombat adds one to the player in Awake if it's missing)
+        if (star == null) star = FindFirstObjectByType<PlayerStar>();
     }
 
-    private void HandleDieLanded(int value, LuckyEffect effect)
+    private void HandleDieLanded(int value, bool lucky)
     {
-        if (effect == LuckyEffect.None) return;
-
-        Debug.Log($"LUCKY {value}: {effect}");
-
-        switch (effect)
-        {
-            case LuckyEffect.KillAll:
-                // Every enemy alive dies. The wave keeps going.
-                foreach (EnemyBase enemy in FindObjectsByType<EnemyBase>(FindObjectsSortMode.None))
-                {
-                    enemy.TakeDamage(enemy.maxHealth);
-                }
-                break;
-
-            case LuckyEffect.Instakill:
-                player.StartInstakill(instakillSeconds);
-                break;
-        }
+        if (lucky && star != null)
+            star.Begin(starSeconds);
     }
 }

@@ -10,6 +10,11 @@ public class EnemyProjectile : MonoBehaviour
     private int damage;
     private bool initialized;
 
+    // The red lane on the ground showing this bullet's path (it fills up as the bullet flies)
+    private GroundTelegraph lane;
+    private float laneLength;
+    private float travelled;
+
     private void Awake()
     {
         GetComponent<SphereCollider>().isTrigger = true;
@@ -27,11 +32,23 @@ public class EnemyProjectile : MonoBehaviour
         Destroy(gameObject, Mathf.Max(0.5f, lifetime));
     }
 
+    // With a lane: the bullet lasts exactly as long as it takes to reach the end of the lane
+    public void Initialize(Vector3 shotDirection, float shotSpeed, int shotDamage, GroundTelegraph warning, float reach)
+    {
+        lane = warning;
+        laneLength = Mathf.Max(0.1f, reach);
+        lifetime = Mathf.Min(lifetime, laneLength / Mathf.Max(0.1f, shotSpeed) + 0.05f);
+        Initialize(shotDirection, shotSpeed, shotDamage);
+    }
+
     private void FixedUpdate()
     {
         if (!initialized) return;
         Rigidbody body = GetComponent<Rigidbody>();
         body.MovePosition(body.position + direction * speed * Time.fixedDeltaTime);
+
+        travelled += speed * Time.fixedDeltaTime;
+        if (lane != null) lane.SetFill(travelled / laneLength);
     }
 
     private void OnTriggerEnter(Collider other)

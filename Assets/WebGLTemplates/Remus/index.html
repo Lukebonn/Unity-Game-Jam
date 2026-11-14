@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no">
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      /* The game always stays 16:9 and as big as the page allows, centred, with black bars
+         around it, so nothing is ever cut off whatever size the itch.io frame is. */
+      html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #000; }
+      #unity-canvas { position: absolute; display: block; background: #000; outline: none; }
+      #loading { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+                 color: #ddd; font: 20px sans-serif; }
+      #fullscreen { position: absolute; right: 8px; bottom: 8px; padding: 4px 10px; font: 14px sans-serif;
+                    color: #ddd; background: rgba(0, 0, 0, 0.5); border: 1px solid #666; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="loading">Loading...</div>
+    <button id="fullscreen" title="Fullscreen">Fullscreen</button>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var aspect = 16 / 9;
+
+      // Size the canvas to the largest 16:9 box that fits the page
+      function fit() {
+        var w = window.innerWidth, h = window.innerHeight;
+        if (w / h > aspect) w = Math.floor(h * aspect); else h = Math.floor(w / aspect);
+        canvas.style.width = w + "px";
+        canvas.style.height = h + "px";
+        canvas.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+        canvas.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
+      }
+      window.addEventListener("resize", fit);
+      fit();
+
+      var buildUrl = "Build";
+      var config = {
+        dataUrl: buildUrl + "/{{{ DATA_FILENAME }}}",
+        frameworkUrl: buildUrl + "/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_THREADS
+        workerUrl: buildUrl + "/{{{ WORKER_FILENAME }}}",
+#endif
+#if USE_WASM
+        codeUrl: buildUrl + "/{{{ CODE_FILENAME }}}",
+#endif
+#if MEMORY_FILENAME
+        memoryUrl: buildUrl + "/{{{ MEMORY_FILENAME }}}",
+#endif
+#if SYMBOLS_FILENAME
+        symbolsUrl: buildUrl + "/{{{ SYMBOLS_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+      };
+
+      var loading = document.querySelector("#loading");
+      var script = document.createElement("script");
+      script.src = buildUrl + "/{{{ LOADER_FILENAME }}}";
+      script.onload = function () {
+        createUnityInstance(canvas, config, function (progress) {
+          loading.textContent = "Loading " + Math.round(progress * 100) + "%";
+        }).then(function (unityInstance) {
+          loading.remove();
+          canvas.focus();
+          document.querySelector("#fullscreen").onclick = function () { unityInstance.SetFullscreen(1); };
+        }).catch(function (message) {
+          alert(message);
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

@@ -146,6 +146,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: b1b2392c467423140a9121ee77a39da7, type: 3}
   m_PrefabInstance: {fileID: 3467967130975459929}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &7010455432859051976 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: b1b2392c467423140a9121ee77a39da7, type: 3}
+  m_PrefabInstance: {fileID: 3467967130975459929}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8694277515174354253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -206,14 +211,55 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7272258834319311019, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2968344286657078905, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4011028065566637490}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7296209355647385981, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3512744469080728941}
   m_SourcePrefab: {fileID: 100100000, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
+--- !u!1 &2155272130766085168 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7296209355647385981, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
+  m_PrefabInstance: {fileID: 8694277515174354253}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3512744469080728941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2155272130766085168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f58e8e992447244b8c0e7beb359df00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MosquitoHardEnemy
+  maxHealth: 100
+  dicePrefab: {fileID: 0}
+  diceSpawnOffset: {x: 0, y: 1, z: 0}
+  healthBarHeight: 1.6
+  moveSpeed: 4.3
+  minRange: 2.8
+  idealRange: 5.5
+  maxRange: 8
+  strafeWeight: 0.4
+  damagePerProjectile: 4
+  projectileSpeed: 19
+  fireCooldown: 2.1
+  windupSeconds: 0.28
+  bulletsPerBurst: 9
+  burstInterval: 0.09
+  spreadDegrees: 11
+  shotReach: 30
+  muzzle: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  animator: {fileID: 7010455432859051976}
 --- !u!4 &5879988294076562228 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2968344286657078905, guid: 574f4bedbb1f79240a86579e569eed89, type: 3}
